@@ -1,20 +1,15 @@
 package me.friendly.exeter.core;
 
-import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
-import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
-import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
 import me.friendly.api.event.basic.BasicEventManager;
 import me.friendly.exeter.command.CommandManager;
 import me.friendly.exeter.config.ConfigManager;
 import me.friendly.exeter.friend.FriendManager;
-import me.friendly.exeter.gui.screens.accountmanager.AccountManager;
+import me.friendly.exeter.account.AccountManager;
 import me.friendly.exeter.keybind.KeybindManager;
 import me.friendly.exeter.logging.Logger;
 import me.friendly.exeter.module.ModuleManager;
 import me.friendly.exeter.plugin.PluginManager;
 import me.friendly.exeter.rotate.RotationManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.Session;
 import org.lwjgl.opengl.Display;
 
 import java.io.File;

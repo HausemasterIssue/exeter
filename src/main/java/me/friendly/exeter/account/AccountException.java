@@ -1,4 +1,4 @@
-package me.friendly.exeter.gui.screens.accountmanager;
+package me.friendly.exeter.account;
 
 public class AccountException
 extends Exception {

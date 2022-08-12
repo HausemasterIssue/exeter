@@ -1,6 +1,6 @@
-package me.friendly.exeter.gui.screens.accountmanager;
+package me.friendly.exeter.account.gui;
 
-import me.friendly.exeter.gui.screens.accountmanager.GuiPasswordField;
+import me.friendly.exeter.core.Exeter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -39,28 +39,20 @@ extends GuiScreen {
         if (guiButton.id == 1) {
             this.minecraft.displayGuiScreen(this.parentScreen);
         } else if (guiButton.id == 0) {
-//            if (this.passwordTextField.getText().length() > 0) {
-//                String usernameTextFieldText = this.usernameTextField.getText();
-//                String passwordTextFieldText = this.passwordTextField.getText();
-//                try {
-//                    String result = Minecraft.getMinecraft().processLogin(usernameTextFieldText, passwordTextFieldText).trim();
-//                    if (result == null || !result.contains(":")) {
-//                        this.error = result;
-//                        return;
-//                    }
-//                    String[] values = result.split(":");
-//                    if (values.length > 1) {
-//                        this.minecraft.setSession(new Session(values[2], values[4], values[3], "mojang"));
-//                    }
-//                    this.minecraft.displayGuiScreen(this.parentScreen);
-//                }
-//                catch (Exception exception) {
-//                    exception.printStackTrace();
-//                }
-//            } else {
-//                this.minecraft.setSession(new Session(this.usernameTextField.getText(), "", "", "mojang"));
-//            }
-//            this.minecraft.displayGuiScreen(this.parentScreen);
+            if (this.passwordTextField.getText().length() > 0) {
+                String usernameTextFieldText = this.usernameTextField.getText();
+                String passwordTextFieldText = this.passwordTextField.getText();
+                try {
+                    Exeter.getInstance().getAccountManager().login(usernameTextFieldText, passwordTextFieldText);
+                    this.minecraft.displayGuiScreen(this.parentScreen);
+                }
+                catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            } else {
+                this.minecraft.session = (new Session(this.usernameTextField.getText(), "", "", "mojang"));
+            }
+            this.minecraft.displayGuiScreen(this.parentScreen);
         }
     }
 

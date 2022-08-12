@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import me.friendly.exeter.gui.screens.accountmanager.GuiAccountScreen;
+import me.friendly.exeter.account.gui.GuiAccountScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;

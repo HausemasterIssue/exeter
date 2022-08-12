@@ -1,7 +1,6 @@
-package me.friendly.exeter.gui.screens.accountmanager;
+package me.friendly.exeter.account;
 
 import me.friendly.api.interfaces.Labeled;
-import me.friendly.exeter.gui.screens.accountmanager.AccountException;
 
 public class Account
 implements Labeled {

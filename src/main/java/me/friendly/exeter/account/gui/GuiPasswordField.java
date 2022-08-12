@@ -1,4 +1,4 @@
-package me.friendly.exeter.gui.screens.accountmanager;///*
+package me.friendly.exeter.account.gui;///*
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

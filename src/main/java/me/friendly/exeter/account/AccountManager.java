@@ -1,22 +1,23 @@
-package me.friendly.exeter.gui.screens.accountmanager;///*
+package me.friendly.exeter.account;///*
+
+import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
+import me.friendly.api.registry.ListRegistry;
+import me.friendly.exeter.config.Config;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.Session;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import me.friendly.api.registry.ListRegistry;
-import me.friendly.exeter.config.Config;
-import me.friendly.exeter.gui.screens.accountmanager.Account;
 
-public final class AccountManager
-extends ListRegistry<Account> {
+public final class AccountManager extends ListRegistry<Account> {
     public AccountManager() {
-        this.registry = new ArrayList();
-        new Config("accounts.txt"){
-
+        new Config("accounts.txt") {
             @Override
-            public void load(Object ... source) {
+            public void load(Object... source) {
                 try {
                     String readLine;
                     if (!this.getFile().exists()) {
@@ -58,6 +59,17 @@ extends ListRegistry<Account> {
                 }
             }
         };
+    }
+
+    public void login(String email, String password) throws AccountException {
+        try {
+            MicrosoftAuthenticator auth = new MicrosoftAuthenticator();
+            MicrosoftAuthResult result = auth.loginWithCredentials(email, password);
+
+            Minecraft.getMinecraft().session = new Session(result.getProfile().getName(), result.getProfile().getId(), result.getAccessToken(), "mojang");
+        } catch (MicrosoftAuthenticationException e) {
+            e.printStackTrace();
+        }
     }
 }
 

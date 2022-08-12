@@ -1,12 +1,10 @@
-package me.friendly.exeter.gui.screens.accountmanager;///*
+package me.friendly.exeter.account.gui;///*
 
 import java.io.IOException;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.friendly.exeter.core.Exeter;
-import me.friendly.exeter.gui.screens.accountmanager.Account;
-import me.friendly.exeter.gui.screens.accountmanager.GuiAccountScreen;
-import me.friendly.exeter.gui.screens.accountmanager.GuiPasswordField;
+import me.friendly.exeter.account.Account;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -57,16 +55,16 @@ extends GuiScreen {
     public void actionPerformed(GuiButton button) {
         if (button.id == 1) {
             if (!this.usernameBox.getText().trim().isEmpty()) {
+                Account account;
+
                 if (this.passwordBox.getText().trim().isEmpty()) {
-                    Account account = new Account(this.usernameBox.getText().trim());
-                    if (!Exeter.getInstance().getAccountManager().getRegistry().contains(account)) {
-                        Exeter.getInstance().getAccountManager().register(account);
-                    }
+                    account = new Account(this.usernameBox.getText().trim());
                 } else {
-                    Account account = new Account(this.usernameBox.getText().trim(), this.passwordBox.getText().trim());
-                    if (!Exeter.getInstance().getAccountManager().getRegistry().contains(account)) {
-                        Exeter.getInstance().getAccountManager().register(account);
-                    }
+                    account = new Account(this.usernameBox.getText().trim(), this.passwordBox.getText().trim());
+                }
+
+                if (!Exeter.getInstance().getAccountManager().getRegistry().contains(account)) {
+                    Exeter.getInstance().getAccountManager().register(account);
                 }
             }
             this.mc.displayGuiScreen(new GuiAccountScreen());
