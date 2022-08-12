@@ -101,14 +101,6 @@ public final class Exeter {
         Display.setTitle(TITLE + " v" + VERSION + "+" + BUILD);
 
         Logger.getLogger().print(String.format("Initialized, took %s milliseconds.", System.nanoTime() / 1000000L - this.startTime));
-
-        MicrosoftAuthenticator auth = new MicrosoftAuthenticator();
-        try {
-            MicrosoftAuthResult res = auth.loginWithCredentials("asrke_mc@hotmail.com", "Outlast1171#");
-            Minecraft.getMinecraft().session = new Session(res.getProfile().getName(), res.getProfile().getId(), res.getAccessToken(), "mojang");
-        } catch (MicrosoftAuthenticationException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public static Exeter getInstance() {
