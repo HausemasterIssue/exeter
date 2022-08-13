@@ -1,4 +1,4 @@
-package me.friendly.exeter.properties;
+package me.friendly.api.properties;
 
 public class EnumProperty<T extends Enum> extends Property<T> {
     public EnumProperty(T value, String... aliases) {

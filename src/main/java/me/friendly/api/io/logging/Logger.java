@@ -1,4 +1,4 @@
-package me.friendly.exeter.logging;
+package me.friendly.api.io.logging;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.Style;

@@ -1,4 +1,4 @@
-package me.friendly.exeter.properties;
+package me.friendly.api.properties;
 
 public class Property<T> {
     private final String[] aliases;

@@ -25,10 +25,10 @@ import me.friendly.exeter.command.impl.server.Connect;
 import me.friendly.exeter.config.Config;
 import me.friendly.exeter.core.Exeter;
 import me.friendly.exeter.events.PacketEvent;
-import me.friendly.exeter.logging.Logger;
+import me.friendly.api.io.logging.Logger;
 import me.friendly.exeter.module.Module;
-import me.friendly.exeter.properties.EnumProperty;
-import me.friendly.exeter.properties.Property;
+import me.friendly.api.properties.EnumProperty;
+import me.friendly.api.properties.Property;
 import net.minecraft.network.play.client.CPacketChatMessage;
 
 public final class CommandManager

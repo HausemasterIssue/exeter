@@ -11,9 +11,9 @@ import me.friendly.exeter.module.impl.render.clickgui.item.properties.BindButton
 import me.friendly.exeter.module.impl.render.clickgui.item.properties.BooleanButton;
 import me.friendly.exeter.module.impl.render.clickgui.item.properties.EnumButton;
 import me.friendly.exeter.module.impl.render.clickgui.item.properties.NumberSlider;
-import me.friendly.exeter.properties.EnumProperty;
-import me.friendly.exeter.properties.NumberProperty;
-import me.friendly.exeter.properties.Property;
+import me.friendly.api.properties.EnumProperty;
+import me.friendly.api.properties.NumberProperty;
+import me.friendly.api.properties.Property;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;

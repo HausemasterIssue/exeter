@@ -1,8 +1,8 @@
 package me.friendly.exeter.module.impl.world;
 
-import me.friendly.api.event.Event;
 import me.friendly.api.event.Listener;
 import me.friendly.api.minecraft.helper.RotationHelper;
+import me.friendly.api.minecraft.helper.WorldHelper;
 import me.friendly.api.stopwatch.Stopwatch;
 import me.friendly.exeter.core.Exeter;
 import me.friendly.exeter.events.MoveUpdateEvent;
@@ -10,17 +10,14 @@ import me.friendly.exeter.events.MoveUpdateEvent.Era;
 import me.friendly.exeter.events.PacketEvent;
 import me.friendly.exeter.module.ModuleType;
 import me.friendly.exeter.module.ToggleableModule;
-import me.friendly.exeter.properties.EnumProperty;
-import me.friendly.exeter.properties.Property;
+import me.friendly.api.properties.EnumProperty;
+import me.friendly.api.properties.Property;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
-import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 
 public class Scaffold extends ToggleableModule {
     private final Property<Boolean> swing = new Property<>(true, "Swing", "swingarm");
@@ -45,6 +42,12 @@ public class Scaffold extends ToggleableModule {
                     previous = current;
                 }
 
+                if (previous != null && rotate.getValue()) {
+                    float[] angles = RotationHelper.calcAngleTo(previous.pos, previous.facing);
+                    Exeter.getInstance().getRotationManager().setRotation(angles);
+                    rotations = angles;
+                }
+
                 current = calc();
                 if (current == null) {
                     return;
@@ -60,40 +63,17 @@ public class Scaffold extends ToggleableModule {
                         s = slot;
                         mc.player.inventory.currentItem = slot;
                     } else if (swap.getValue().equals(Swap.SPOOF)) {
-                        if (slot != s && mc.player.inventory.currentItem != slot) {
+                        if (Exeter.getInstance().getInventoryManager().slot != slot) {
                             mc.player.connection.sendPacket(new CPacketHeldItemChange(slot));
                             s = slot;
                         }
                     }
                 }
 
-                if (rotate.getValue()) {
-                    float[] angles = RotationHelper.calcAngleTo(current.pos, current.facing);
-
-                    Exeter.getInstance().getRotationManager().setRotation(angles);
-
-                    rotations = angles;
-                }
-
                 if (event.era.equals(Era.POST)) {
 
-                    EnumActionResult result = mc.playerController.processRightClickBlock(
-                            mc.player,
-                            mc.world,
-                            current.pos,
-                            current.facing,
-                            new Vec3d(current.pos).addVector(0.5, 0.5, 0.5),
-                            EnumHand.MAIN_HAND
-                    );
-
-                    if (result.equals(EnumActionResult.SUCCESS)) {
-                        if (swing.getValue()) {
-                            mc.player.swingArm(EnumHand.MAIN_HAND);
-                        } else {
-                            mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
-                        }
-
-                        if (mc.gameSettings.keyBindJump.isKeyDown()) {
+                    if (WorldHelper.placeAt(current.pos, current.facing, EnumHand.MAIN_HAND, swing.getValue())) {
+                        if (mc.gameSettings.keyBindJump.isKeyDown() && tower.getValue()) {
                             mc.player.motionX *= 0.3;
                             mc.player.motionZ *= 0.3;
                             mc.player.jump();
@@ -108,6 +88,38 @@ public class Scaffold extends ToggleableModule {
                             mc.player.inventory.currentItem = oldSlot;
                         }
                     }
+
+//                    EnumActionResult result = mc.playerController.processRightClickBlock(
+//                            mc.player,
+//                            mc.world,
+//                            current.pos,
+//                            current.facing,
+//                            new Vec3d(current.pos).addVector(0.5, 0.5, 0.5),
+//                            EnumHand.MAIN_HAND
+//                    );
+//
+//                    if (result.equals(EnumActionResult.SUCCESS)) {
+//                        if (swing.getValue()) {
+//                            mc.player.swingArm(EnumHand.MAIN_HAND);
+//                        } else {
+//                            mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
+//                        }
+//
+//                        if (mc.gameSettings.keyBindJump.isKeyDown() && tower.getValue()) {
+//                            mc.player.motionX *= 0.3;
+//                            mc.player.motionZ *= 0.3;
+//                            mc.player.jump();
+//
+//                            if (stopwatch.hasCompleted(1200L)) {
+//                                stopwatch.reset();
+//                                mc.player.motionY = -0.28;
+//                            }
+//                        }
+//
+//                        if (swap.getValue().equals(Swap.NORMAL)) {
+//                            mc.player.inventory.currentItem = oldSlot;
+//                        }
+//                    }
                 }
             }
         });

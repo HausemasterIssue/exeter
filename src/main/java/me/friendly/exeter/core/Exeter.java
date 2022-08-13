@@ -1,14 +1,15 @@
 package me.friendly.exeter.core;
 
 import me.friendly.api.event.basic.BasicEventManager;
+import me.friendly.api.minecraft.inventory.InventoryManager;
 import me.friendly.exeter.command.CommandManager;
+import me.friendly.exeter.config.Config;
 import me.friendly.exeter.config.ConfigManager;
 import me.friendly.exeter.friend.FriendManager;
 import me.friendly.exeter.account.AccountManager;
 import me.friendly.exeter.keybind.KeybindManager;
-import me.friendly.exeter.logging.Logger;
+import me.friendly.api.io.logging.Logger;
 import me.friendly.exeter.module.ModuleManager;
-import me.friendly.exeter.plugin.PluginManager;
 import me.friendly.exeter.rotate.RotationManager;
 import org.lwjgl.opengl.Display;
 
@@ -32,74 +33,62 @@ import java.io.File;
  * @version b23
  */
 public final class Exeter {
-    private static Exeter instance = null;
+    private static Exeter INSTANCE = null;
+
+    private static final File DIRECTORY = new File(System.getProperty("user.home"), "exeter");
+    private static final long START_TIME = System.nanoTime() / 1000000L;
+
     public static final String TITLE = "Exeter";
     public static final String VERSION = "1.0.0";
     public static final int BUILD = 1;
 
-    public final long startTime = System.nanoTime() / 1000000L;
-    private BasicEventManager eventManager;
-    private KeybindManager keybindManager;
-    private ModuleManager moduleManager;
-    private CommandManager commandManager;
-    private FriendManager friendManager;
-    private ConfigManager configManager;
-    private AccountManager accountManager;
-    private PluginManager pluginManager;
-    private RotationManager rotationManager;
-    private File directory;
+    private final BasicEventManager eventManager;
+    private final KeybindManager keybindManager;
+    private final ModuleManager moduleManager;
+    private final CommandManager commandManager;
+    private final FriendManager friendManager;
+    private final ConfigManager configManager;
+    private final AccountManager accountManager;
+    private final RotationManager rotationManager;
+    private final InventoryManager inventoryManager;
 
     public Exeter() {
 
         Logger.getLogger().print("Initializing...");
-        instance = this;
+        INSTANCE = this;
 
         // In exeter 1.8, the config file is named clarinet for whatever reason. I changed that to be exeter
-        this.directory = new File(System.getProperty("user.home"), "exeter");
-        if (!this.directory.exists()) {
-            Logger.getLogger().print(String.format("%s client directory.", this.directory.mkdir() ? "Created" : "Failed to create"));
+        if (!DIRECTORY.exists()) {
+            Logger.getLogger().print(String.format("%s client directory.", DIRECTORY.mkdir() ? "Created" : "Failed to create"));
         }
 
-        this.eventManager = new BasicEventManager();
-        this.configManager = new ConfigManager();
-        this.friendManager = new FriendManager();
-        this.keybindManager = new KeybindManager();
-        this.commandManager = new CommandManager();
-        this.moduleManager = new ModuleManager();
-        this.accountManager = new AccountManager();
-        // this.pluginManager = new PluginManager();
+        eventManager = new BasicEventManager();
+        configManager = new ConfigManager();
+        friendManager = new FriendManager();
+        keybindManager = new KeybindManager();
+        commandManager = new CommandManager();
+        moduleManager = new ModuleManager();
+        accountManager = new AccountManager();
         rotationManager = new RotationManager();
+        inventoryManager = new InventoryManager();
 
-        this.getConfigManager().getRegistry().forEach(config -> config.load(new Object[0]));
+        getConfigManager().getRegistry().forEach(Config::load);
 
-//        try {
-//            this.pluginManager.onLoad();
-//            System.out.println("Plugin manager started.");
-//            System.out.println(this.pluginManager.getList() + "has been loaded.");
-//        }
-//        catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-        Runtime.getRuntime().addShutdownHook(new Thread("Shutdown Hook Thread"){
-
+        Runtime.getRuntime().addShutdownHook(new Thread("Shutdown Hook Thread") {
             @Override
             public void run() {
                 Logger.getLogger().print("Shutting down...");
-                getConfigManager().getRegistry().forEach(config -> config.save(new Object[0]));
+                getConfigManager().getRegistry().forEach(Config::save);
                 Logger.getLogger().print("Shutdown.");
             }
         });
 
-        //Display.setTitle(String.format("%s b%s  ", TITLE, 23));
-
         Display.setTitle(TITLE + " v" + VERSION + "+" + BUILD);
-
-        Logger.getLogger().print(String.format("Initialized, took %s milliseconds.", System.nanoTime() / 1000000L - this.startTime));
+        Logger.getLogger().print(String.format("Initialized, took %s milliseconds.", System.nanoTime() / 1000000L - START_TIME));
     }
 
     public static Exeter getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     public ModuleManager getModuleManager() {
@@ -126,21 +115,20 @@ public final class Exeter {
         return this.configManager;
     }
 
-    // AccountManager is not working
     public AccountManager getAccountManager() {
         return this.accountManager;
-    }
-
-    public PluginManager getPluginManager() {
-        return this.pluginManager;
     }
 
     public RotationManager getRotationManager() {
         return rotationManager;
     }
 
+    public InventoryManager getInventoryManager() {
+        return inventoryManager;
+    }
+
     public File getDirectory() {
-        return this.directory;
+        return DIRECTORY;
     }
 }
 

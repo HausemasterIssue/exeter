@@ -12,8 +12,6 @@ import java.util.Map;
 import java.util.Random;
 import javax.annotation.Nullable;
 
-import me.friendly.exeter.core.Exeter;
-import me.friendly.exeter.logging.Logger;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

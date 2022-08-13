@@ -1,15 +1,13 @@
 package me.friendly.exeter.module.impl.world;
 
-import me.friendly.api.event.Event;
 import me.friendly.api.event.Listener;
 import me.friendly.api.minecraft.helper.RotationHelper;
 import me.friendly.exeter.events.MoveUpdateEvent;
 import me.friendly.exeter.events.TickEvent;
-import me.friendly.exeter.logging.Logger;
 import me.friendly.exeter.module.ModuleType;
 import me.friendly.exeter.module.ToggleableModule;
-import me.friendly.exeter.properties.NumberProperty;
-import me.friendly.exeter.properties.Property;
+import me.friendly.api.properties.NumberProperty;
+import me.friendly.api.properties.Property;
 import net.minecraft.block.BlockBed;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.util.EnumFacing;

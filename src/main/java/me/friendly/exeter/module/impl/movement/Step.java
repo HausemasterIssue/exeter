@@ -5,8 +5,8 @@ import me.friendly.exeter.events.StepEvent;
 import me.friendly.exeter.events.TickEvent;
 import me.friendly.exeter.module.ModuleType;
 import me.friendly.exeter.module.ToggleableModule;
-import me.friendly.exeter.properties.EnumProperty;
-import me.friendly.exeter.properties.NumberProperty;
+import me.friendly.api.properties.EnumProperty;
+import me.friendly.api.properties.NumberProperty;
 import net.minecraft.network.play.client.CPacketPlayer.Position;
 
 import java.util.HashMap;

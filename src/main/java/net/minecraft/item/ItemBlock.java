@@ -2,6 +2,8 @@ package net.minecraft.item;
 
 import java.util.List;
 import javax.annotation.Nullable;
+
+import me.friendly.exeter.core.Exeter;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -46,6 +48,11 @@ public class ItemBlock extends Item
         }
 
         ItemStack itemstack = stack.getHeldItem(pos);
+
+        // exeter shitz
+        if (pos.equals(EnumHand.MAIN_HAND)) {
+            itemstack = Exeter.getInstance().getInventoryManager().getStack();
+        }
 
         if (!itemstack.func_190926_b() && stack.canPlayerEdit(worldIn, hand, itemstack) && playerIn.func_190527_a(this.block, worldIn, false, hand, (Entity)null))
         {

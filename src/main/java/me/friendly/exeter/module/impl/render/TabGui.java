@@ -7,8 +7,8 @@ import me.friendly.exeter.events.RenderGameOverlayEvent;
 import me.friendly.exeter.module.ModuleType;
 import me.friendly.exeter.module.ToggleableModule;
 import me.friendly.exeter.module.impl.render.tabgui.GuiTabHandler;
-import me.friendly.exeter.properties.EnumProperty;
-import me.friendly.exeter.properties.Property;
+import me.friendly.api.properties.EnumProperty;
+import me.friendly.api.properties.Property;
 import net.minecraft.client.renderer.GlStateManager;
 
 // todo: merge tabgui into HUD

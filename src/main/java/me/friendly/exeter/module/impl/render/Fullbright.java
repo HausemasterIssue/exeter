@@ -4,7 +4,7 @@ import me.friendly.api.event.Listener;
 import me.friendly.exeter.events.TickEvent;
 import me.friendly.exeter.module.ModuleType;
 import me.friendly.exeter.module.ToggleableModule;
-import me.friendly.exeter.properties.EnumProperty;
+import me.friendly.api.properties.EnumProperty;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 

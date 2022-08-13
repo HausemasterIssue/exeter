@@ -1,12 +1,11 @@
 package me.friendly.exeter.module.impl.combat;
 
-import me.friendly.api.event.Event;
 import me.friendly.api.event.Listener;
 import me.friendly.api.stopwatch.Stopwatch;
 import me.friendly.exeter.events.PacketEvent;
 import me.friendly.exeter.module.ModuleType;
 import me.friendly.exeter.module.ToggleableModule;
-import me.friendly.exeter.properties.NumberProperty;
+import me.friendly.api.properties.NumberProperty;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketUseEntity;

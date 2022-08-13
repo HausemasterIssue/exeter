@@ -1,13 +1,12 @@
 package me.friendly.exeter.module.impl.movement;
 
-import me.friendly.api.event.Event;
 import me.friendly.api.event.Listener;
 import me.friendly.exeter.events.BlockPushEvent;
 import me.friendly.exeter.events.PacketEvent;
 import me.friendly.exeter.events.TickEvent;
 import me.friendly.exeter.module.ModuleType;
 import me.friendly.exeter.module.ToggleableModule;
-import me.friendly.exeter.properties.Property;
+import me.friendly.api.properties.Property;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.network.play.server.SPacketExplosion;
 

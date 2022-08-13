@@ -7,8 +7,8 @@ import me.friendly.exeter.events.MoveUpdateEvent;
 import me.friendly.exeter.events.PacketEvent;
 import me.friendly.exeter.module.ModuleType;
 import me.friendly.exeter.module.ToggleableModule;
-import me.friendly.exeter.properties.EnumProperty;
-import me.friendly.exeter.properties.Property;
+import me.friendly.api.properties.EnumProperty;
+import me.friendly.api.properties.Property;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import net.minecraft.util.math.AxisAlignedBB;
 

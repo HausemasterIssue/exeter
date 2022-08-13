@@ -11,8 +11,8 @@ import java.util.*;
 import me.friendly.api.interfaces.Labeled;
 import me.friendly.exeter.core.Exeter;
 import me.friendly.exeter.presets.Preset;
-import me.friendly.exeter.properties.NumberProperty;
-import me.friendly.exeter.properties.Property;
+import me.friendly.api.properties.NumberProperty;
+import me.friendly.api.properties.Property;
 import net.minecraft.client.Minecraft;
 
 /**

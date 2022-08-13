@@ -15,8 +15,7 @@ import javax.imageio.ImageIO;
 import me.friendly.api.stopwatch.Stopwatch;
 import me.friendly.exeter.command.Argument;
 import me.friendly.exeter.command.Command;
-import me.friendly.exeter.logging.Logger;
-import net.minecraft.util.ScreenShotHelper;
+import me.friendly.api.io.logging.Logger;
 import org.apache.commons.codec.binary.Base64;
 
 public final class ScreenShot

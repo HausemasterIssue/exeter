@@ -1,8 +1,8 @@
 package me.friendly.exeter.module.impl.render;
 
 import me.friendly.exeter.module.Module;
-import me.friendly.exeter.properties.NumberProperty;
-import me.friendly.exeter.properties.Property;
+import me.friendly.api.properties.NumberProperty;
+import me.friendly.api.properties.Property;
 import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;

@@ -2,8 +2,8 @@ package me.friendly.exeter.module.impl.world;
 
 import me.friendly.exeter.module.ModuleType;
 import me.friendly.exeter.module.ToggleableModule;
-import me.friendly.exeter.properties.NumberProperty;
-import me.friendly.exeter.properties.Property;
+import me.friendly.api.properties.NumberProperty;
+import me.friendly.api.properties.Property;
 
 public class AutoMine extends ToggleableModule {
     private final NumberProperty<Double> range = new NumberProperty<>(4.5, 1.0, 6.0, "Range", "breakrange");

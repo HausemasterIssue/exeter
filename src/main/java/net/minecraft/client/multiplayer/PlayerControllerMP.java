@@ -1,7 +1,7 @@
 package net.minecraft.client.multiplayer;
 
 import io.netty.buffer.Unpooled;
-import me.friendly.exeter.logging.Logger;
+import me.friendly.exeter.core.Exeter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.BlockStructure;
@@ -428,6 +428,90 @@ public class PlayerControllerMP
                 IBlockState iblockstate = worldIn.getBlockState(stack);
 
                 if ((!player.isSneaking() || player.getHeldItemMainhand().func_190926_b() && player.getHeldItemOffhand().func_190926_b()) && iblockstate.getBlock().onBlockActivated(worldIn, stack, iblockstate, player, vec, pos, f, f1, f2))
+                {
+                    flag = true;
+                }
+
+                if (!flag && itemstack.getItem() instanceof ItemBlock)
+                {
+                    ItemBlock itemblock = (ItemBlock)itemstack.getItem();
+
+                    if (!itemblock.canPlaceBlockOnSide(worldIn, stack, pos, player, itemstack))
+                    {
+                        return EnumActionResult.FAIL;
+                    }
+                }
+            }
+
+            this.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(stack, pos, vec, f, f1, f2));
+
+            if (!flag && this.currentGameType != GameType.SPECTATOR)
+            {
+                if (itemstack.func_190926_b())
+                {
+                    return EnumActionResult.PASS;
+                }
+                else if (player.getCooldownTracker().hasCooldown(itemstack.getItem()))
+                {
+                    return EnumActionResult.PASS;
+                }
+                else
+                {
+                    if (itemstack.getItem() instanceof ItemBlock && !player.canUseCommandBlock())
+                    {
+                        Block block = ((ItemBlock)itemstack.getItem()).getBlock();
+
+                        if (block instanceof BlockCommandBlock || block instanceof BlockStructure)
+                        {
+                            return EnumActionResult.FAIL;
+                        }
+                    }
+
+                    if (this.currentGameType.isCreative())
+                    {
+                        int i = itemstack.getMetadata();
+                        int j = itemstack.func_190916_E();
+                        EnumActionResult enumactionresult = itemstack.onItemUse(player, worldIn, stack, vec, pos, f, f1, f2);
+                        itemstack.setItemDamage(i);
+                        itemstack.func_190920_e(j);
+                        return enumactionresult;
+                    }
+                    else
+                    {
+                        return itemstack.onItemUse(player, worldIn, stack, vec, pos, f, f1, f2);
+                    }
+                }
+            }
+            else
+            {
+                return EnumActionResult.SUCCESS;
+            }
+        }
+    }
+
+    public EnumActionResult processRightClick(EntityPlayerSP player, WorldClient worldIn, BlockPos stack, EnumFacing pos, Vec3d facing, EnumHand vec)
+    {
+        //this.syncCurrentPlayItem();
+        ItemStack itemstack = Exeter.getInstance().getInventoryManager().getStack();
+
+        //Logger.getLogger().printToChat(itemstack.getItem().getUnlocalizedName());
+
+        float f = (float)(facing.xCoord - (double)stack.getX());
+        float f1 = (float)(facing.yCoord - (double)stack.getY());
+        float f2 = (float)(facing.zCoord - (double)stack.getZ());
+        boolean flag = false;
+
+        if (!this.mc.world.getWorldBorder().contains(stack))
+        {
+            return EnumActionResult.FAIL;
+        }
+        else
+        {
+            if (this.currentGameType != GameType.SPECTATOR)
+            {
+                IBlockState iblockstate = worldIn.getBlockState(stack);
+
+                if ((!player.isSneaking() || itemstack.func_190926_b()) && iblockstate.getBlock().onBlockActivated(worldIn, stack, iblockstate, player, vec, pos, f, f1, f2))
                 {
                     flag = true;
                 }

@@ -1,5 +1,7 @@
 package me.friendly.api.registry;
 
+import java.util.ArrayList;
+
 /**
  * Register
  *
@@ -7,7 +9,7 @@ package me.friendly.api.registry;
  */
 public class ListRegistry<T> {
 
-    protected java.util.List<T> registry;
+    protected java.util.List<T> registry = new ArrayList<>();
 
     public void register(T element) {
         this.registry.add(element);

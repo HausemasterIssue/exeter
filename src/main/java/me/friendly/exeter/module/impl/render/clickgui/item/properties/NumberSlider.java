@@ -6,7 +6,7 @@ import me.friendly.exeter.module.impl.render.Colors;
 import me.friendly.exeter.module.impl.render.clickgui.ClickGui;
 import me.friendly.exeter.module.impl.render.clickgui.Panel;
 import me.friendly.exeter.module.impl.render.clickgui.item.Item;
-import me.friendly.exeter.properties.NumberProperty;
+import me.friendly.api.properties.NumberProperty;
 import org.lwjgl.input.Mouse;
 
 public class NumberSlider

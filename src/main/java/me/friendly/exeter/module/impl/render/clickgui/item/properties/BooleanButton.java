@@ -5,7 +5,7 @@ import me.friendly.api.minecraft.render.font.FontUtil;
 import me.friendly.exeter.module.impl.render.Colors;
 import me.friendly.exeter.module.impl.render.clickgui.item.Button;
 import me.friendly.exeter.module.impl.render.clickgui.item.Item;
-import me.friendly.exeter.properties.Property;
+import me.friendly.api.properties.Property;
 
 public class BooleanButton
 extends Button {

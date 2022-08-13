@@ -4,7 +4,7 @@ import me.friendly.api.event.Listener;
 import me.friendly.exeter.events.TickEvent;
 import me.friendly.exeter.module.ModuleType;
 import me.friendly.exeter.module.ToggleableModule;
-import me.friendly.exeter.properties.NumberProperty;
+import me.friendly.api.properties.NumberProperty;
 
 public class GameSpeed extends ToggleableModule {
     private final NumberProperty<Float> speed = new NumberProperty<>(1.5f, 0.1f, 20.0f, "Speed", "timerspeed");

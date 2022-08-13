@@ -5,7 +5,7 @@ import me.friendly.api.minecraft.render.font.FontUtil;
 import me.friendly.exeter.module.impl.render.Colors;
 import me.friendly.exeter.module.impl.render.clickgui.item.Button;
 import me.friendly.exeter.module.impl.render.clickgui.item.Item;
-import me.friendly.exeter.properties.EnumProperty;
+import me.friendly.api.properties.EnumProperty;
 
 public class EnumButton
 extends Button {
