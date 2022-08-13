@@ -17,6 +17,8 @@ import javax.imageio.ImageIO;
 
 import me.friendly.exeter.core.Exeter;
 import me.friendly.exeter.events.RenderWorldEvent;
+import me.friendly.exeter.module.impl.render.NoWeather;
+import me.friendly.exeter.module.impl.render.NoWeather.Mode;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.material.Material;
@@ -2138,7 +2140,12 @@ public class EntityRenderer implements IResourceManagerReloadListener
                             blockpos$mutableblockpos.setPos(l1, k2, k1);
                             float f1 = biome.getFloatTemperature(blockpos$mutableblockpos);
 
-                            if (world.getBiomeProvider().getTemperatureAtHeight(f1, j2) >= 0.15F)
+                            float t = world.getBiomeProvider().getTemperatureAtHeight(f1, j2);
+                            if (NoWeather.INSTANCE.isRunning() && NoWeather.INSTANCE.mode.getValue().equals(Mode.SNOW)) {
+                                t = 0.1f;
+                            }
+
+                            if (t >= 0.15F)
                             {
                                 if (j1 != 0)
                                 {

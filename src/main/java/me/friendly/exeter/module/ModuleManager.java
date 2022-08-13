@@ -15,9 +15,7 @@ import me.friendly.api.registry.ListRegistry;
 import me.friendly.exeter.config.Config;
 import me.friendly.exeter.core.Exeter;
 import me.friendly.exeter.module.impl.combat.*;
-import me.friendly.exeter.module.impl.exploits.PacketFly;
-import me.friendly.exeter.module.impl.exploits.PacketUse;
-import me.friendly.exeter.module.impl.exploits.PingSpoof;
+import me.friendly.exeter.module.impl.exploits.*;
 import me.friendly.exeter.module.impl.miscellaneous.AutoRespawn;
 import me.friendly.exeter.module.impl.miscellaneous.NoRotate;
 import me.friendly.exeter.module.impl.movement.*;
@@ -66,6 +64,9 @@ public final class ModuleManager
         register(new Flight());
         register(new SelfFill());
         register(new NoRender());
+        register(new FastProjectile());
+        register(new ChorusDelay());
+        register(new NoWeather());
 
         this.registry.sort(Comparator.comparing(Module::getLabel));
 

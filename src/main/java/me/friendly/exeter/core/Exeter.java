@@ -36,7 +36,7 @@ public final class Exeter {
     private static Exeter INSTANCE = null;
 
     private static final File DIRECTORY = new File(System.getProperty("user.home"), "exeter");
-    private static final long START_TIME = System.nanoTime() / 1000000L;
+    public static final long START_TIME = System.nanoTime() / 1000000L;
 
     public static final String TITLE = "Exeter";
     public static final String VERSION = "1.0.0";

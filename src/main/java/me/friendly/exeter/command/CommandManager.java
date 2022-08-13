@@ -14,7 +14,6 @@ import me.friendly.exeter.command.impl.client.Friends;
 import me.friendly.exeter.command.impl.client.Help;
 import me.friendly.exeter.command.impl.client.Modules;
 import me.friendly.exeter.command.impl.client.Prefix;
-import me.friendly.exeter.command.impl.client.Presets;
 import me.friendly.exeter.command.impl.client.Runtime;
 import me.friendly.exeter.command.impl.client.ScreenShot;
 import me.friendly.exeter.command.impl.client.Toggle;
@@ -44,7 +43,6 @@ extends ListRegistry<Command> {
         this.register(new Modules());
         this.register(new Prefix());
         this.register(new Connect());
-        this.register(new Presets());
         this.register(new HClip());
         this.register(new VClip());
         this.register(new Friends.Add());

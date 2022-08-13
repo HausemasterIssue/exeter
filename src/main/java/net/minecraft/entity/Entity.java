@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 
 import me.friendly.exeter.core.Exeter;
 import me.friendly.exeter.events.BlockPushEvent;
+import me.friendly.exeter.events.SafeWalkEvent;
 import me.friendly.exeter.events.StepEvent;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
@@ -806,7 +807,17 @@ public abstract class Entity implements ICommandSender
             double d3 = p_70091_4_;
             double d4 = p_70091_6_;
 
-            if ((x == MoverType.SELF || x == MoverType.PLAYER) && this.onGround && this.isSneaking() && this instanceof EntityPlayer)
+            boolean safewalk = this.onGround && this.isSneaking() && this instanceof EntityPlayer;
+
+            SafeWalkEvent event = new SafeWalkEvent();
+            Exeter.getInstance().getEventManager().dispatch(event);
+
+            if (event.isCanceled()) {
+                safewalk = onGround && this instanceof EntityPlayer;
+            }
+
+            //if ((x == MoverType.SELF || x == MoverType.PLAYER) && this.onGround && this.isSneaking() && this instanceof EntityPlayer)
+            if ((x == MoverType.SELF || x == MoverType.PLAYER) && safewalk)
             {
                 for (double d5 = 0.05D; p_70091_2_ != 0.0D && this.world.getCollisionBoxes(this, this.getEntityBoundingBox().offset(p_70091_2_, (double)(-this.stepHeight), 0.0D)).isEmpty(); d2 = p_70091_2_)
                 {
@@ -1788,7 +1799,7 @@ public abstract class Entity implements ICommandSender
     /**
      * Creates a Vec3 using the pitch and yaw of the entities rotation.
      */
-    protected final Vec3d getVectorForRotation(float pitch, float yaw)
+    public final Vec3d getVectorForRotation(float pitch, float yaw)
     {
         float f = MathHelper.cos(-yaw * 0.017453292F - (float)Math.PI);
         float f1 = MathHelper.sin(-yaw * 0.017453292F - (float)Math.PI);

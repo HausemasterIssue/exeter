@@ -12,6 +12,9 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
+
+import me.friendly.exeter.module.impl.render.NoWeather;
+import me.friendly.exeter.module.impl.render.NoWeather.Mode;
 import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.advancements.FunctionManager;
 import net.minecraft.block.Block;
@@ -3645,6 +3648,14 @@ public abstract class World implements IBlockAccess
 
     public float getThunderStrength(float delta)
     {
+        if (NoWeather.INSTANCE.isRunning()) {
+            if (NoWeather.INSTANCE.mode.getValue().equals(Mode.THUNDER)) {
+                return 1.0f;
+            } else {
+                return 0.0f;
+            }
+        }
+
         return (this.prevThunderingStrength + (this.thunderingStrength - this.prevThunderingStrength) * delta) * this.getRainStrength(delta);
     }
 
@@ -3662,6 +3673,16 @@ public abstract class World implements IBlockAccess
      */
     public float getRainStrength(float delta)
     {
+        if (NoWeather.INSTANCE.isRunning()) {
+            if (NoWeather.INSTANCE.mode.getValue().equals(Mode.CLEAR)) {
+                return 0.0f;
+            } else if (NoWeather.INSTANCE.mode.getValue().equals(Mode.SNOW)) {
+                return 1.0f;
+            } else {
+                return 1.0f;
+            }
+        }
+
         return this.prevRainingStrength + (this.rainingStrength - this.prevRainingStrength) * delta;
     }
 

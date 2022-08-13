@@ -10,7 +10,6 @@ import java.util.*;
 
 import me.friendly.api.interfaces.Labeled;
 import me.friendly.exeter.core.Exeter;
-import me.friendly.exeter.presets.Preset;
 import me.friendly.api.properties.NumberProperty;
 import me.friendly.api.properties.Property;
 import net.minecraft.client.Minecraft;
@@ -26,7 +25,6 @@ implements Labeled {
     private final String[] aliases;
     /** Properties for the Module. */
     private final List<Property<?>> properties = new ArrayList<>();
-    private final List<Preset> presets = new ArrayList<Preset>();
     protected Minecraft mc = Minecraft.getMinecraft();
 
     /**
@@ -75,25 +73,6 @@ implements Labeled {
                 if (!alias.equalsIgnoreCase(propertyAlias)) continue;
                 return property;
             }
-        }
-        return null;
-    }
-
-    public List<Preset> getPresets() {
-        return this.presets;
-    }
-
-    protected void offsetPresets(Preset ... presets) {
-        for (Preset preset : presets) {
-            this.presets.add(preset);
-        }
-        this.presets.sort((p1, p2) -> p1.getLabel().compareTo(p2.getLabel()));
-    }
-
-    public Preset getPresetByLabel(String label) {
-        for (Preset preset : presets) {
-            if (!label.equalsIgnoreCase(preset.getLabel())) continue;
-            return preset;
         }
         return null;
     }

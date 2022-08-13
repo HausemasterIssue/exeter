@@ -1,17 +1,19 @@
 package me.friendly.exeter.module.impl.world;
 
 import me.friendly.api.event.Listener;
+import me.friendly.api.minecraft.helper.RaycastHelper;
 import me.friendly.api.minecraft.helper.RotationHelper;
 import me.friendly.api.minecraft.helper.WorldHelper;
+import me.friendly.api.properties.EnumProperty;
+import me.friendly.api.properties.Property;
 import me.friendly.api.stopwatch.Stopwatch;
 import me.friendly.exeter.core.Exeter;
 import me.friendly.exeter.events.MoveUpdateEvent;
 import me.friendly.exeter.events.MoveUpdateEvent.Era;
-import me.friendly.exeter.events.PacketEvent;
+import me.friendly.exeter.events.SafeWalkEvent;
+import me.friendly.exeter.events.TickEvent;
 import me.friendly.exeter.module.ModuleType;
 import me.friendly.exeter.module.ToggleableModule;
-import me.friendly.api.properties.EnumProperty;
-import me.friendly.api.properties.Property;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
@@ -20,20 +22,38 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 
 public class Scaffold extends ToggleableModule {
+    private final EnumProperty<Era> era = new EnumProperty<>(Era.POST, "Era", "placetiming", "timing");
     private final Property<Boolean> swing = new Property<>(true, "Swing", "swingarm");
     private final Property<Boolean> rotate = new Property<>(true, "Rotate", "rot", "face");
+    private final EnumProperty<Raycast> raycast = new EnumProperty<>(Raycast.NONE, "Raycast", "raytrace", "legit");
     private final EnumProperty<Swap> swap = new EnumProperty<>(Swap.NORMAL, "Swap", "swapping", "blockhold");
     private final EnumProperty<BlockPicker> picker = new EnumProperty<>(BlockPicker.SEQUENTIAL, "Picker", "blockpicker", "pk");
     private final Property<Boolean> tower = new Property<>(true, "Tower", "fastup");
+    private final Property<Boolean> eagle = new Property<>(false, "Eagle", "sneak");
 
     private final Stopwatch stopwatch = new Stopwatch();
     private PlaceInfo previous, current;
-    private float[] rotations;
-    private int s;
+
+    private boolean eagling = false;
 
     public Scaffold() {
         super("Scaffold", new String[]{"scaffold", "blockfly", "bridge", "autobridge"}, ModuleType.WORLD);
-        offerProperties(swing, rotate, swap, picker, tower);
+        offerProperties(swing, rotate, raycast, swap, picker, tower, eagle);
+
+        listeners.add(new Listener<TickEvent>("scaffold_tick_listener") {
+            @Override
+            public void call(TickEvent event) {
+                if (eagle.getValue()) {
+                    eagling = current == null || mc.world.isAirBlock(current.pos);
+                    mc.gameSettings.keyBindSneak.pressed = eagling;
+                } else {
+                    if (eagling) {
+                        mc.gameSettings.keyBindSneak.pressed = false;
+                        eagling = false;
+                    }
+                }
+            }
+        });
 
         listeners.add(new Listener<MoveUpdateEvent>("scaffold_moveupdate_listener") {
             @Override
@@ -45,7 +65,6 @@ public class Scaffold extends ToggleableModule {
                 if (previous != null && rotate.getValue()) {
                     float[] angles = RotationHelper.calcAngleTo(previous.pos, previous.facing);
                     Exeter.getInstance().getRotationManager().setRotation(angles);
-                    rotations = angles;
                 }
 
                 current = calc();
@@ -60,19 +79,40 @@ public class Scaffold extends ToggleableModule {
                     return;
                 } else {
                     if (swap.getValue().equals(Swap.NORMAL)) {
-                        s = slot;
                         mc.player.inventory.currentItem = slot;
                     } else if (swap.getValue().equals(Swap.SPOOF)) {
                         if (Exeter.getInstance().getInventoryManager().slot != slot) {
                             mc.player.connection.sendPacket(new CPacketHeldItemChange(slot));
-                            s = slot;
                         }
                     }
                 }
 
-                if (event.era.equals(Era.POST)) {
+                if (event.era.equals(era.getValue())) {
 
-                    if (WorldHelper.placeAt(current.pos, current.facing, EnumHand.MAIN_HAND, swing.getValue())) {
+                    boolean result;
+
+                    switch (raycast.getValue()) {
+                        case FULL: {
+                            result = WorldHelper.placeAtRaycast(EnumHand.MAIN_HAND, swing.getValue());
+                            break;
+                        }
+
+                        default:
+                        case SEMI:
+                        case NONE: {
+
+                            if (raycast.getValue().equals(Raycast.NONE)) {
+                                result = WorldHelper.placeAt(current.pos, current.facing, EnumHand.MAIN_HAND, swing.getValue());
+                            } else if (RaycastHelper.canSeeBlockFace(current.pos, current.facing)) {
+                                result = WorldHelper.placeAtRaycast(EnumHand.MAIN_HAND, swing.getValue());
+                            } else {
+                                result = false;
+                            }
+                            break;
+                        }
+                    }
+
+                    if (result) {
                         if (mc.gameSettings.keyBindJump.isKeyDown() && tower.getValue()) {
                             mc.player.motionX *= 0.3;
                             mc.player.motionZ *= 0.3;
@@ -88,53 +128,31 @@ public class Scaffold extends ToggleableModule {
                             mc.player.inventory.currentItem = oldSlot;
                         }
                     }
-
-//                    EnumActionResult result = mc.playerController.processRightClickBlock(
-//                            mc.player,
-//                            mc.world,
-//                            current.pos,
-//                            current.facing,
-//                            new Vec3d(current.pos).addVector(0.5, 0.5, 0.5),
-//                            EnumHand.MAIN_HAND
-//                    );
-//
-//                    if (result.equals(EnumActionResult.SUCCESS)) {
-//                        if (swing.getValue()) {
-//                            mc.player.swingArm(EnumHand.MAIN_HAND);
-//                        } else {
-//                            mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
-//                        }
-//
-//                        if (mc.gameSettings.keyBindJump.isKeyDown() && tower.getValue()) {
-//                            mc.player.motionX *= 0.3;
-//                            mc.player.motionZ *= 0.3;
-//                            mc.player.jump();
-//
-//                            if (stopwatch.hasCompleted(1200L)) {
-//                                stopwatch.reset();
-//                                mc.player.motionY = -0.28;
-//                            }
-//                        }
-//
-//                        if (swap.getValue().equals(Swap.NORMAL)) {
-//                            mc.player.inventory.currentItem = oldSlot;
-//                        }
-//                    }
                 }
             }
         });
 
-        listeners.add(new Listener<PacketEvent>("scaffold_packet_listener") {
+        listeners.add(new Listener<SafeWalkEvent>("scaffold_safewalk_listener") {
             @Override
-            public void call(PacketEvent event) {
-//                if (event.getPacket() instanceof CPacketHeldItemChange) {
-//                    CPacketHeldItemChange packet = event.getPacket();
-//                    if (packet.getSlotId() != s) {
-//                        packet.slotId = s;
-//                    }
-//                }
+            public void call(SafeWalkEvent event) {
+                event.setCanceled(true);
             }
         });
+    }
+
+    @Override
+    protected void onDisable() {
+        super.onDisable();
+
+        if (eagling) {
+            mc.gameSettings.keyBindSneak.pressed = false;
+            eagling = false;
+        }
+
+        current = null;
+        previous = null;
+
+        Exeter.getInstance().getInventoryManager().sync();
     }
 
     private int calcSlot() {
@@ -196,6 +214,10 @@ public class Scaffold extends ToggleableModule {
 
     public enum BlockPicker {
         HIGHEST, SEQUENTIAL
+    }
+
+    public enum Raycast {
+        NONE, SEMI, FULL
     }
 
     private static class PlaceInfo {

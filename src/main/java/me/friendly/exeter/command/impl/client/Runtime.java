@@ -13,7 +13,7 @@ extends Command {
     @Override
     public String dispatch() {
         String runtime;
-        long second = (System.nanoTime() / 1000000L - Exeter.getInstance().startTime) / 1000L;
+        long second = (System.nanoTime() / 1000000L - Exeter.START_TIME) / 1000L;
         long minute = second / 60L;
         long hour = minute / 60L;
         switch (this.getArgument("format").getValue()) {

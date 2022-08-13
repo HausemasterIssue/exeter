@@ -1,6 +1,9 @@
 package net.minecraft.item;
 
+import me.friendly.exeter.core.Exeter;
+import me.friendly.exeter.events.FoodFinishedEvent;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -79,6 +82,10 @@ public class ItemFood extends Item
 
     protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player)
     {
+        if (player.equals(Minecraft.getMinecraft().player)) {
+            Exeter.getInstance().getEventManager().dispatch(new FoodFinishedEvent(stack));
+        }
+
         if (!worldIn.isRemote && this.potionId != null && worldIn.rand.nextFloat() < this.potionEffectProbability)
         {
             player.addPotionEffect(new PotionEffect(this.potionId));
