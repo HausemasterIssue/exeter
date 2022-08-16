@@ -35,6 +35,7 @@ import javax.crypto.SecretKey;
 
 import me.friendly.exeter.core.Exeter;
 import me.friendly.exeter.events.PacketEvent;
+import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import net.minecraft.util.CryptManager;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.LazyLoadBase;
@@ -182,8 +183,11 @@ public class NetworkManager extends SimpleChannelInboundHandler < Packet<? >>
     public void sendPacket(Packet<?> packetIn)
     {
         PacketEvent packetSendEvent = new PacketEvent(packetIn);
-        Exeter.getInstance().getEventManager()
-                .dispatch(packetSendEvent);
+        Exeter.getInstance().getEventManager().dispatch(packetSendEvent);
+
+        if (packetIn instanceof SPacketPlayerPosLook) {
+            me.friendly.api.io.logging.Logger.getLogger().printToChat("bruh");
+        }
 
         if (packetSendEvent.isCanceled()) {
             return;
