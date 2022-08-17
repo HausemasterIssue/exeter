@@ -2,6 +2,9 @@ package net.minecraft.client.renderer;
 
 import com.google.common.base.MoreObjects;
 import java.util.Objects;
+
+import me.friendly.exeter.core.Exeter;
+import me.friendly.exeter.events.RenderGameOverlayEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -593,6 +596,13 @@ public class ItemRenderer
      */
     private void renderFireInFirstPerson()
     {
+        RenderGameOverlayEvent event = new RenderGameOverlayEvent(RenderGameOverlayEvent.Type.FIRE);
+        Exeter.getInstance().getEventManager().dispatch(event);
+
+        if (!event.isRenderFire()) {
+            return;
+        }
+
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 0.9F);

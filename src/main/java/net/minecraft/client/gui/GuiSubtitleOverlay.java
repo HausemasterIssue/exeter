@@ -29,11 +29,8 @@ public class GuiSubtitleOverlay extends Gui implements ISoundEventListener
     {
         ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
 
-        RenderGameOverlayEvent overlayEvent
-                = new RenderGameOverlayEvent(scaledResolution);
-
-        Exeter.getInstance().getEventManager()
-                .dispatch(overlayEvent);
+        RenderGameOverlayEvent overlayEvent = new RenderGameOverlayEvent(scaledResolution);
+        Exeter.getInstance().getEventManager().dispatch(overlayEvent);
 
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 

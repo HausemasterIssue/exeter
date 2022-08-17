@@ -2,12 +2,10 @@ package me.friendly.exeter.events;
 
 import me.friendly.api.event.Event;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.entity.item.EntityItem;
 
-public class RenderGameOverlayEvent
-extends Event {
+public class RenderGameOverlayEvent extends Event {
     private ScaledResolution scaledResolution;
-    private EntityItem entityItem;
+
     private final Type type;
     private boolean renderPumpkin = false;
     private boolean renderItems = false;
@@ -18,11 +16,6 @@ extends Event {
         this.type = type;
     }
 
-    public RenderGameOverlayEvent(EntityItem entityItem) {
-        this.type = Type.ITEM;
-        this.entityItem = entityItem;
-    }
-
     public RenderGameOverlayEvent(ScaledResolution scaledResolution) {
         this.type = Type.IN_GAME;
         this.scaledResolution = scaledResolution;
@@ -30,10 +23,6 @@ extends Event {
 
     public Type getType() {
         return this.type;
-    }
-
-    public EntityItem getEntityItem() {
-        return this.entityItem;
     }
 
     public ScaledResolution getScaledResolution() {
@@ -72,39 +61,12 @@ extends Event {
         this.renderHurtcam = renderHurtcam;
     }
 
-    public static enum Type {
+    public enum Type {
         IN_GAME,
         PUMPKIN,
         ITEM,
         HURTCAM,
-        FIRE;
-
-    }
-
-    public static enum ElementType
-    {
-        ALL,
-        HELMET,
-        PORTAL,
-        CROSSHAIRS,
-        BOSSHEALTH, // All boss bars
-        BOSSINFO,    // Individual boss bar
-        ARMOR,
-        HEALTH,
-        FOOD,
-        AIR,
-        HOTBAR,
-        EXPERIENCE,
-        TEXT,
-        HEALTHMOUNT,
-        JUMPBAR,
-        CHAT,
-        PLAYER_LIST,
-        DEBUG,
-        POTION_ICONS,
-        SUBTITLES,
-        FPS_GRAPH,
-        VIGNETTE
+        FIRE
     }
 }
 

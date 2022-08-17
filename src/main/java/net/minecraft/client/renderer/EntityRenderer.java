@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 
 import me.friendly.exeter.core.Exeter;
+import me.friendly.exeter.events.RenderGameOverlayEvent;
 import me.friendly.exeter.events.RenderWorldEvent;
 import me.friendly.exeter.module.impl.render.NoWeather;
 import me.friendly.exeter.module.impl.render.NoWeather.Mode;
@@ -668,7 +669,10 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
     private void hurtCameraEffect(float partialTicks)
     {
-        if (this.mc.getRenderViewEntity() instanceof EntityLivingBase)
+        RenderGameOverlayEvent event = new RenderGameOverlayEvent(RenderGameOverlayEvent.Type.HURTCAM);
+        Exeter.getInstance().getEventManager().dispatch(event);
+
+        if (this.mc.getRenderViewEntity() instanceof EntityLivingBase && event.isRenderHurtcam())
         {
             EntityLivingBase entitylivingbase = (EntityLivingBase)this.mc.getRenderViewEntity();
             float f = (float)entitylivingbase.hurtTime - partialTicks;
@@ -3040,7 +3044,10 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
     private void func_190563_a(int p_190563_1_, int p_190563_2_, float p_190563_3_)
     {
-        if (this.field_190566_ab != null && this.field_190567_ac > 0)
+        RenderGameOverlayEvent event = new RenderGameOverlayEvent(RenderGameOverlayEvent.Type.ITEM);
+        Exeter.getInstance().getEventManager().dispatch(event);
+
+        if (this.field_190566_ab != null && this.field_190567_ac > 0 && event.isRenderItems())
         {
             int i = 40 - this.field_190567_ac;
             float f = ((float)i + p_190563_3_) / 40.0F;
