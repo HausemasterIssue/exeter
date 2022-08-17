@@ -17,6 +17,7 @@ import me.friendly.exeter.core.Exeter;
 import me.friendly.exeter.module.impl.combat.*;
 import me.friendly.exeter.module.impl.exploits.*;
 import me.friendly.exeter.module.impl.miscellaneous.AutoRespawn;
+import me.friendly.exeter.module.impl.miscellaneous.ExtraTab;
 import me.friendly.exeter.module.impl.miscellaneous.NoRotate;
 import me.friendly.exeter.module.impl.movement.*;
 import me.friendly.exeter.module.impl.render.*;
@@ -67,6 +68,7 @@ public final class ModuleManager
         register(new FastProjectile());
         register(new ChorusDelay());
         register(new NoWeather());
+        register(new ExtraTab());
 
         this.registry.sort(Comparator.comparing(Module::getLabel));
 

@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.mojang.authlib.GameProfile;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import io.netty.buffer.Unpooled;
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +23,8 @@ import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
+
+import me.friendly.exeter.core.Exeter;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
 import net.minecraft.client.ClientBrandRetriever;
@@ -1944,6 +1947,13 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
             }
             else
             {
+                me.friendly.api.io.logging.Logger.getLogger().printToChat(
+                        "Server attempted to check if "
+                                + ChatFormatting.RED
+                                + p_189688_1_
+                                + ChatFormatting.GRAY
+                                + " existed on your local drive.");
+
                 throw new URISyntaxException(p_189688_1_, "Invalid levelstorage resourcepack path");
             }
         }

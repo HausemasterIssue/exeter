@@ -6,6 +6,10 @@ import com.mojang.authlib.GameProfile;
 import java.util.Comparator;
 import java.util.List;
 import javax.annotation.Nullable;
+
+import me.friendly.exeter.core.Exeter;
+import me.friendly.exeter.events.TabOverlayEvent;
+import me.friendly.exeter.module.impl.miscellaneous.ExtraTab;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -24,6 +28,8 @@ import net.minecraft.world.GameType;
 public class GuiPlayerTabOverlay extends Gui
 {
     private static final Ordering<NetworkPlayerInfo> ENTRY_ORDERING = Ordering.from(new GuiPlayerTabOverlay.PlayerComparator());
+    private static final Ordering<NetworkPlayerInfo> PING_ORDERING = Ordering.from(new ExtraTab.PingSorting());
+
     private final Minecraft mc;
     private final GuiIngame guiIngame;
     private ITextComponent footer;
@@ -48,7 +54,21 @@ public class GuiPlayerTabOverlay extends Gui
      */
     public String getPlayerName(NetworkPlayerInfo networkPlayerInfoIn)
     {
-        return networkPlayerInfoIn.getDisplayName() != null ? networkPlayerInfoIn.getDisplayName().getFormattedText() : ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName());
+        String raw = "";
+
+        TabOverlayEvent event = new TabOverlayEvent(TabOverlayEvent.Type.TEXT);
+        event.setPlayerText(networkPlayerInfoIn.getDisplayName() != null ? networkPlayerInfoIn.getDisplayName().getUnformattedText() : ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName()));
+        Exeter.getInstance().getEventManager().dispatch(event);
+
+        if (event.isCanceled()) {
+            raw = event.getPlayerText();
+        } else {
+            raw = networkPlayerInfoIn.getDisplayName() != null ? networkPlayerInfoIn.getDisplayName().getFormattedText() : ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName());
+        }
+
+        return raw;
+
+        //return networkPlayerInfoIn.getDisplayName() != null ? networkPlayerInfoIn.getDisplayName().getFormattedText() : ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName());
     }
 
     /**
@@ -71,7 +91,23 @@ public class GuiPlayerTabOverlay extends Gui
     public void renderPlayerlist(int width, Scoreboard scoreboardIn, @Nullable ScoreObjective scoreObjectiveIn)
     {
         NetHandlerPlayClient nethandlerplayclient = this.mc.player.connection;
-        List<NetworkPlayerInfo> list = ENTRY_ORDERING.<NetworkPlayerInfo>sortedCopy(nethandlerplayclient.getPlayerInfoMap());
+
+        Ordering<NetworkPlayerInfo> sorter = ENTRY_ORDERING;
+
+        TabOverlayEvent event = new TabOverlayEvent(TabOverlayEvent.Type.SORT);
+        Exeter.getInstance().getEventManager().dispatch(event);
+
+        switch (event.getSorting()) {
+            case DEFAULT:
+                sorter = ENTRY_ORDERING;
+                break;
+
+            case PING:
+                sorter = PING_ORDERING;
+                break;
+        }
+
+        List<NetworkPlayerInfo> list = sorter.sortedCopy(nethandlerplayclient.getPlayerInfoMap());
         int i = 0;
         int j = 0;
 
@@ -87,7 +123,12 @@ public class GuiPlayerTabOverlay extends Gui
             }
         }
 
-        list = list.subList(0, Math.min(list.size(), 80));
+        event = new TabOverlayEvent(TabOverlayEvent.Type.LENGTH);
+        Exeter.getInstance().getEventManager().dispatch(event);
+
+        int count = event.getLength(); // default: 80
+
+        list = list.subList(0, Math.min(list.size(), count));
         int l3 = list.size();
         int i4 = l3;
         int j4;
@@ -98,6 +139,13 @@ public class GuiPlayerTabOverlay extends Gui
         }
 
         boolean flag = this.mc.isIntegratedServerRunning() || this.mc.getConnection().getNetworkManager().isEncrypted();
+
+        event = new TabOverlayEvent(TabOverlayEvent.Type.PICTURE);
+        Exeter.getInstance().getEventManager().dispatch(event);
+        if (event.isCanceled()) {
+            flag = event.isRenderPicture();
+        }
+
         int l;
 
         if (scoreObjectiveIn != null)
@@ -238,39 +286,61 @@ public class GuiPlayerTabOverlay extends Gui
 
     protected void drawPing(int p_175245_1_, int p_175245_2_, int p_175245_3_, NetworkPlayerInfo networkPlayerInfoIn)
     {
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(ICONS);
-        int i = 0;
-        int j;
+        int latency = networkPlayerInfoIn.getResponseTime();
 
-        if (networkPlayerInfoIn.getResponseTime() < 0)
-        {
+        TabOverlayEvent event = new TabOverlayEvent(TabOverlayEvent.Type.PING);
+        Exeter.getInstance().getEventManager().dispatch(event);
+
+        int j = 4;
+        if (latency < 0) {
             j = 5;
-        }
-        else if (networkPlayerInfoIn.getResponseTime() < 150)
-        {
+        } else if (latency < 150) {
             j = 0;
-        }
-        else if (networkPlayerInfoIn.getResponseTime() < 300)
-        {
+        } else if (latency < 300) {
             j = 1;
-        }
-        else if (networkPlayerInfoIn.getResponseTime() < 600)
-        {
+        } else if (latency < 600) {
             j = 2;
-        }
-        else if (networkPlayerInfoIn.getResponseTime() < 1000)
-        {
+        } else if (latency < 1000) {
             j = 3;
         }
-        else
-        {
-            j = 4;
-        }
 
-        this.zLevel += 100.0F;
-        this.drawTexturedModalRect(p_175245_2_ + p_175245_1_ - 11, p_175245_3_, 0, 176 + j * 8, 10, 8);
-        this.zLevel -= 100.0F;
+        switch (event.getPingDisplay()) {
+            case DEFAULT: {
+                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                this.mc.getTextureManager().bindTexture(ICONS);
+
+                this.zLevel += 100.0F;
+                this.drawTexturedModalRect(p_175245_2_ + p_175245_1_ - 11, p_175245_3_, 0, 176 + j * 8, 10, 8);
+                this.zLevel -= 100.0F;
+
+                break;
+            }
+
+            case TEXT: {
+                TextFormatting formatting = TextFormatting.GREEN;
+                switch (j) {
+                    case 1:
+                        formatting = TextFormatting.YELLOW;
+                        break;
+
+                    case 2:
+                        formatting = TextFormatting.RED;
+                        break;
+
+                    case 3:
+                    case 4:
+                    case 5:
+                        formatting = TextFormatting.DARK_RED;
+                        break;
+                }
+
+                mc.fontRendererObj.drawStringWithShadow(formatting.toString() + latency + "ms", p_175245_2_ + p_175245_1_ - 11, p_175245_3_, -1);
+                break;
+            }
+
+            case NONE:
+                break;
+        }
     }
 
     private void drawScoreboardValues(ScoreObjective objective, int p_175247_2_, String name, int p_175247_4_, int p_175247_5_, NetworkPlayerInfo info)
