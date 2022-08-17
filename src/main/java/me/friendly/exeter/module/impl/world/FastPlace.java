@@ -19,9 +19,10 @@ public class FastPlace extends ToggleableModule {
             public void call(TickEvent event) {
                 mc.rightClickDelayTimer = 0;
 
-                if (ghostFix.getValue() && mc.gameSettings.keyBindUseItem.isKeyDown()) {
-                    mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(mc.player.getActiveHand()));
-                }
+                // this is extremely fucked
+//                if (ghostFix.getValue() && mc.gameSettings.keyBindUseItem.isKeyDown()) {
+//                    mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(mc.player.getActiveHand()));
+//                }
             }
         });
     }

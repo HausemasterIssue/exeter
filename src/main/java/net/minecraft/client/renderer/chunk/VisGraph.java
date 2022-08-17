@@ -4,6 +4,9 @@ import java.util.ArrayDeque;
 import java.util.BitSet;
 import java.util.EnumSet;
 import java.util.Set;
+
+import me.friendly.exeter.core.Exeter;
+import me.friendly.exeter.events.CaveCullingEvent;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IntegerCache;
 import net.minecraft.util.math.BlockPos;
@@ -37,7 +40,8 @@ public class VisGraph
     {
         SetVisibility setvisibility = new SetVisibility();
 
-        if (4096 - this.empty < 256)
+        //if (4096 - this.empty < 256)
+        if (4097 - empty < 256)
         {
             setvisibility.setAllVisible(true);
         }
@@ -54,6 +58,14 @@ public class VisGraph
                     setvisibility.setManyVisible(this.floodFill(i));
                 }
             }
+        }
+
+        CaveCullingEvent event = new CaveCullingEvent();
+        Exeter.getInstance().getEventManager().dispatch(event);
+
+        if (event.isCanceled()) {
+            setvisibility = new SetVisibility();
+            setvisibility.setAllVisible(true);
         }
 
         return setvisibility;

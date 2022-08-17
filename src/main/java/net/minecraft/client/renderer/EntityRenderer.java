@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 import me.friendly.exeter.core.Exeter;
 import me.friendly.exeter.events.RenderGameOverlayEvent;
 import me.friendly.exeter.events.RenderWorldEvent;
+import me.friendly.exeter.module.impl.render.CameraClip;
 import me.friendly.exeter.module.impl.render.NoWeather;
 import me.friendly.exeter.module.impl.render.NoWeather.Mode;
 import net.minecraft.block.Block;
@@ -726,6 +727,12 @@ public class EntityRenderer implements IResourceManagerReloadListener
         double d0 = entity.prevPosX + (entity.posX - entity.prevPosX) * (double)partialTicks;
         double d1 = entity.prevPosY + (entity.posY - entity.prevPosY) * (double)partialTicks + (double)f;
         double d2 = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * (double)partialTicks;
+
+        if (CameraClip.INSTANCE.isRunning()) {
+            d0 = 3.0;
+            d1 = 3.0 + f;
+            d2 = 3.0;
+        }
 
         if (entity instanceof EntityLivingBase && ((EntityLivingBase)entity).isPlayerSleeping())
         {

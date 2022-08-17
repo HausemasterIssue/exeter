@@ -1,5 +1,7 @@
 package net.minecraft.util;
 
+import me.friendly.exeter.core.Exeter;
+import me.friendly.exeter.events.InputUpdateEvent;
 import net.minecraft.client.settings.GameSettings;
 
 public class MovementInputFromOptions extends MovementInput
@@ -13,6 +15,13 @@ public class MovementInputFromOptions extends MovementInput
 
     public void updatePlayerMoveState()
     {
+        InputUpdateEvent event = new InputUpdateEvent(this);
+        Exeter.getInstance().getEventManager().dispatch(event);
+
+        if (event.isCanceled()) {
+            return;
+        }
+
         this.moveStrafe = 0.0F;
         this.moveForward = 0.0F;
 

@@ -392,11 +392,19 @@ public class ParticleManager
     public void renderLitParticles(Entity entityIn, float partialTick)
     {
         float f = 0.017453292F;
-        float f1 = MathHelper.cos(entityIn.rotationYaw * 0.017453292F);
-        float f2 = MathHelper.sin(entityIn.rotationYaw * 0.017453292F);
-        float f3 = -f2 * MathHelper.sin(entityIn.rotationPitch * 0.017453292F);
-        float f4 = f1 * MathHelper.sin(entityIn.rotationPitch * 0.017453292F);
-        float f5 = MathHelper.cos(entityIn.rotationPitch * 0.017453292F);
+
+//        float f1 = MathHelper.cos(entityIn.rotationYaw * 0.017453292F);
+//        float f2 = MathHelper.sin(entityIn.rotationYaw * 0.017453292F);
+//        float f3 = -f2 * MathHelper.sin(entityIn.rotationPitch * 0.017453292F);
+//        float f4 = f1 * MathHelper.sin(entityIn.rotationPitch * 0.017453292F);
+//        float f5 = MathHelper.cos(entityIn.rotationPitch * 0.017453292F);
+
+        // https://bugs.mojang.com/browse/MC-74764
+        float f1 = ActiveRenderInfo.getRotationX();
+        float f2 = ActiveRenderInfo.getRotationZ();
+        float f3 = ActiveRenderInfo.getRotationYZ();
+        float f4 = ActiveRenderInfo.getRotationXY();
+        float f5 = ActiveRenderInfo.getRotationXZ();
 
         for (int i = 0; i < 2; ++i)
         {

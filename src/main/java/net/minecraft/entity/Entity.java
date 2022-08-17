@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 
 import me.friendly.exeter.core.Exeter;
 import me.friendly.exeter.events.BlockPushEvent;
+import me.friendly.exeter.events.PlayerTurnEvent;
 import me.friendly.exeter.events.SafeWalkEvent;
 import me.friendly.exeter.events.StepEvent;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -27,6 +28,7 @@ import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockPattern;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.command.CommandResultStats;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.crash.CrashReport;
@@ -487,6 +489,15 @@ public abstract class Entity implements ICommandSender
      */
     public void setAngles(float yaw, float pitch)
     {
+        if (this instanceof EntityPlayerSP) {
+            PlayerTurnEvent event = new PlayerTurnEvent(yaw, pitch);
+            Exeter.getInstance().getEventManager().dispatch(event);
+
+            if (event.isCanceled()) {
+                return;
+            }
+        }
+
         float f = this.rotationPitch;
         float f1 = this.rotationYaw;
         this.rotationYaw = (float)((double)this.rotationYaw + (double)yaw * 0.15D);

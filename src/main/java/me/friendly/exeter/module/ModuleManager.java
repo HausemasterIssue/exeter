@@ -21,10 +21,7 @@ import me.friendly.exeter.module.impl.miscellaneous.ExtraTab;
 import me.friendly.exeter.module.impl.miscellaneous.NoRotate;
 import me.friendly.exeter.module.impl.movement.*;
 import me.friendly.exeter.module.impl.render.*;
-import me.friendly.exeter.module.impl.world.FastPlace;
-import me.friendly.exeter.module.impl.world.Fucker;
-import me.friendly.exeter.module.impl.world.GameSpeed;
-import me.friendly.exeter.module.impl.world.Scaffold;
+import me.friendly.exeter.module.impl.world.*;
 import org.lwjgl.input.Keyboard;
 
 /**
@@ -69,6 +66,8 @@ public final class ModuleManager
         register(new ChorusDelay());
         register(new NoWeather());
         register(new ExtraTab());
+        register(new CameraClip());
+        register(new FreeCam());
 
         this.registry.sort(Comparator.comparing(Module::getLabel));
 

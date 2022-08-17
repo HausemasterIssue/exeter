@@ -1990,7 +1990,7 @@ public class RenderGlobal implements IWorldEventListener, IResourceManagerReload
             GlStateManager.color(0.0F, 0.0F, 0.0F);
             double d3 = this.mc.player.getPositionEyes(partialTicks).yCoord - this.theWorld.getHorizon();
 
-            if (d3 < 0.0D)
+            //if (d3 < 0.0D)
             {
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(0.0F, 12.0F, 0.0F);
