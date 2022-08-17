@@ -24,7 +24,7 @@ public class FreeCam extends ToggleableModule {
 
     public FreeCam() {
         super("Free Camera", new String[]{"freecam", "freecamera", "spectator"}, ModuleType.WORLD);
-        offerProperties(speed);
+        offerProperties(speed, noCaveCulling);
 
         listeners.add(new Listener<CaveCullingEvent>("freecam_caveculling_listener") {
             @Override
