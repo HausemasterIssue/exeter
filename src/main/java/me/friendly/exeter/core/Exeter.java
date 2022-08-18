@@ -12,6 +12,7 @@ import me.friendly.api.io.logging.Logger;
 import me.friendly.exeter.module.ModuleManager;
 import me.friendly.exeter.rotate.RotationManager;
 import org.lwjgl.opengl.Display;
+import viamcp.ViaMCP;
 
 import java.io.File;
 
@@ -82,6 +83,13 @@ public final class Exeter {
                 Logger.getLogger().print("Shutdown.");
             }
         });
+
+        try {
+            ViaMCP.getInstance().start();
+            ViaMCP.getInstance().initAsyncSlider();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Display.setTitle(TITLE + " v" + VERSION + "+" + BUILD);
         Logger.getLogger().print(String.format("Initialized, took %s milliseconds.", System.nanoTime() / 1000000L - START_TIME));

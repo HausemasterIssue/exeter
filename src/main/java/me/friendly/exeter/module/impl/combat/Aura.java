@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumHand;
+import viamcp.utils.AttackOrder;
 
 import java.util.Comparator;
 import java.util.Random;
@@ -146,13 +147,16 @@ public class Aura extends ToggleableModule {
     private void attack() {
         if (target != null) {
 
-            if (keepSprint.getValue()) {
-                mc.player.connection.sendPacket(new CPacketUseEntity(target));
-            } else {
-                mc.playerController.attackEntity(mc.player, target);
-            }
+            // viamcp compatible - verus moment
+            AttackOrder.sendFixedAttack(mc.player, target, EnumHand.MAIN_HAND, keepSprint.getValue());
 
-            mc.player.swingArm(EnumHand.MAIN_HAND);
+//            if (keepSprint.getValue()) {
+//                mc.player.connection.sendPacket(new CPacketUseEntity(target));
+//            } else {
+//                mc.playerController.attackEntity(mc.player, target);
+//            }
+//
+//            mc.player.swingArm(EnumHand.MAIN_HAND);
         }
     }
 

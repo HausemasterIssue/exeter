@@ -222,6 +222,7 @@ import org.lwjgl.opengl.GLContext;
 import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
+import viamcp.utils.AttackOrder;
 
 public class Minecraft implements IThreadListener, ISnooperInfo
 {
@@ -1615,7 +1616,8 @@ public class Minecraft implements IThreadListener, ISnooperInfo
                 switch (this.objectMouseOver.typeOfHit)
                 {
                     case ENTITY:
-                        this.playerController.attackEntity(this.player, this.objectMouseOver.entityHit);
+                        // this.playerController.attackEntity(this.player, this.objectMouseOver.entityHit);
+                        AttackOrder.sendFixedAttack(this.player, this.objectMouseOver.entityHit, EnumHand.MAIN_HAND, false);
                         break;
 
                     case BLOCK:
@@ -1636,7 +1638,8 @@ public class Minecraft implements IThreadListener, ISnooperInfo
                         this.player.resetCooldown();
                 }
 
-                this.player.swingArm(EnumHand.MAIN_HAND);
+                // this.player.swingArm(EnumHand.MAIN_HAND);
+                AttackOrder.sendConditionalSwing(this.objectMouseOver, EnumHand.MAIN_HAND);
             }
         }
     }
