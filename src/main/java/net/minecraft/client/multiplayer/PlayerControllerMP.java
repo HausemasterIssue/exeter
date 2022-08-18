@@ -492,7 +492,13 @@ public class PlayerControllerMP
     public EnumActionResult processRightClick(EntityPlayerSP player, WorldClient worldIn, BlockPos stack, EnumFacing pos, Vec3d facing, EnumHand vec)
     {
         //this.syncCurrentPlayItem();
-        ItemStack itemstack = Exeter.getInstance().getInventoryManager().getStack();
+//        ItemStack itemstack = Exeter.getInstance().getInventoryManager().getStack();
+//        if (vec.equals(EnumHand.OFF_HAND)) {
+//            itemstack = mc.player.getHeldItemOffhand();
+//        }
+
+        // edited: InventoryPlayer#getCurrentItem
+        ItemStack itemstack = player.getHeldItem(vec);
 
         //Logger.getLogger().printToChat(itemstack.getItem().getUnlocalizedName());
 
@@ -511,7 +517,8 @@ public class PlayerControllerMP
             {
                 IBlockState iblockstate = worldIn.getBlockState(stack);
 
-                if ((!player.isSneaking() || itemstack.func_190926_b()) && iblockstate.getBlock().onBlockActivated(worldIn, stack, iblockstate, player, vec, pos, f, f1, f2))
+                ItemStack s = vec.equals(EnumHand.MAIN_HAND) ? itemstack : player.getHeldItemMainhand();
+                if ((!player.isSneaking() || (s.func_190926_b()) && player.getHeldItemOffhand().func_190926_b()) && iblockstate.getBlock().onBlockActivated(worldIn, stack, iblockstate, player, vec, pos, f, f1, f2))
                 {
                     flag = true;
                 }

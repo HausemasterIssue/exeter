@@ -48,11 +48,11 @@ public class ItemBlock extends Item
         }
 
         ItemStack itemstack = stack.getHeldItem(pos);
-
-        // exeter shitz
-        if (pos.equals(EnumHand.MAIN_HAND)) {
-            itemstack = Exeter.getInstance().getInventoryManager().getStack();
-        }
+//        if (pos.equals(EnumHand.MAIN_HAND)) {
+//            itemstack = Exeter.getInstance().getInventoryManager().getStack();
+//        } else {
+//            itemstack = stack.getHeldItem(pos);
+//        }
 
         if (!itemstack.func_190926_b() && stack.canPlayerEdit(worldIn, hand, itemstack) && playerIn.func_190527_a(this.block, worldIn, false, hand, (Entity)null))
         {

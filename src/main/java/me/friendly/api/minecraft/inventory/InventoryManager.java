@@ -38,7 +38,7 @@ public class InventoryManager {
             return mc.player.getHeldItemMainhand();
         }
 
-        return mc.player.inventory.getStackInSlot(slot);
+        return mc.player.inventory.mainInventory.get(slot);
     }
 
     public int getSlot() {

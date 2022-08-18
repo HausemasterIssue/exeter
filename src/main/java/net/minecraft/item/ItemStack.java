@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Map.Entry;
 import javax.annotation.Nullable;
+
+import me.friendly.api.io.logging.Logger;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -1260,6 +1262,7 @@ public final class ItemStack
 
     public void func_190918_g(int p_190918_1_)
     {
+        //Logger.getLogger().printToChat("Removed " + p_190918_1_);
         this.func_190917_f(-p_190918_1_);
     }
 }
