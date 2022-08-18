@@ -13,6 +13,9 @@ import me.friendly.api.properties.NumberProperty;
 import me.friendly.api.properties.Property;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumHand;
 
@@ -32,6 +35,8 @@ public class Aura extends ToggleableModule {
     private final NumberProperty<Double> range = new NumberProperty<>(4.5, 3.0, 6.0, "Range", "hitrange", "distance");
     private final NumberProperty<Double> wallRange = new NumberProperty<>(3.0, 3.0, 6.0, "Wall Range", "wallhitrange", "walldistance");
 
+    private final Property<Boolean> weaponOnly = new Property<>(true, "Weapon Only", "weapon");
+
     private final Property<Boolean> hitDelay = new Property<>(true, "Hit Delay", "1.9", "hitdelay");
     private final Property<Boolean> fullCharge = new Property<>(true, "Charged Attack", "chargedattack", "extradamage", "wait");
     private final Property<Boolean> keepSprint = new Property<>(false, "Keep Sprint", "keepsprint", "sprintattack");
@@ -45,7 +50,7 @@ public class Aura extends ToggleableModule {
 
     public Aura() {
         super("Aura", new String[]{"aura", "killaura", "forcefield", "ka"}, ModuleType.COMBAT);
-        offerProperties(mode, priority, era, rotate, raytrace, range, wallRange, hitDelay, fullCharge, keepSprint, min, max, deviation);
+        offerProperties(mode, priority, era, rotate, raytrace, range, wallRange, weaponOnly, hitDelay, fullCharge, keepSprint, min, max, deviation);
 
         listeners.add(new Listener<MoveUpdateEvent>("aura_moveupdate_listener") {
             @Override
@@ -73,6 +78,13 @@ public class Aura extends ToggleableModule {
 
                 if (target == null) {
                     return;
+                }
+
+                if (weaponOnly.getValue()) {
+                    ItemStack held = mc.player.getHeldItemMainhand();
+                    if (!(held.getItem() instanceof ItemSword || held.getItem() instanceof ItemAxe)) {
+                        return;
+                    }
                 }
 
                 if (rotate.getValue()) {
