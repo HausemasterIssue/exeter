@@ -193,10 +193,6 @@ public class NetworkManager extends SimpleChannelInboundHandler < Packet<? >>
         PacketEvent packetSendEvent = new PacketEvent(packetIn);
         Exeter.getInstance().getEventManager().dispatch(packetSendEvent);
 
-        if (packetIn instanceof SPacketPlayerPosLook) {
-            me.friendly.api.io.logging.Logger.getLogger().printToChat("bruh");
-        }
-
         if (packetSendEvent.isCanceled()) {
             return;
         }
