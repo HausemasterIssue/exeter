@@ -66,6 +66,9 @@ import optifine.CustomItems;
 import optifine.Reflector;
 import optifine.ReflectorForge;
 import optifine.TextureAnimations;
+import viamcp.ViaMCP;
+import viamcp.protocols.ProtocolCollection;
+import viamcp.utils.AttackOrder;
 
 public class GuiIngame extends Gui
 {
@@ -446,6 +449,11 @@ public class GuiIngame extends Gui
                 GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
                 GlStateManager.enableAlpha();
                 this.drawTexturedModalRect(l / 2 - 7, i1 / 2 - 7, 0, 0, 16, 16);
+
+                // viamcp: do not render attack indicator if on 1.8 or below
+                if (AttackOrder.isBeforeCombatUpdate()) {
+                    return;
+                }
 
                 if (this.mc.gameSettings.attackIndicator == 1)
                 {
