@@ -18,6 +18,7 @@ import me.friendly.exeter.module.impl.combat.*;
 import me.friendly.exeter.module.impl.exploits.*;
 import me.friendly.exeter.module.impl.miscellaneous.AutoRespawn;
 import me.friendly.exeter.module.impl.miscellaneous.ExtraTab;
+import me.friendly.exeter.module.impl.miscellaneous.MiddleClick;
 import me.friendly.exeter.module.impl.miscellaneous.NoRotate;
 import me.friendly.exeter.module.impl.movement.*;
 import me.friendly.exeter.module.impl.render.*;
@@ -68,6 +69,7 @@ public final class ModuleManager
         register(new ExtraTab());
         register(new CameraClip());
         register(new FreeCam());
+        register(new MiddleClick());
 
         this.registry.sort(Comparator.comparing(Module::getLabel));
 
