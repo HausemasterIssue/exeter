@@ -25,6 +25,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 import me.friendly.exeter.core.Exeter;
+import me.friendly.exeter.events.DeathEvent;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
 import net.minecraft.client.ClientBrandRetriever;
@@ -594,6 +595,10 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
     {
         PacketThreadUtil.checkThreadAndEnqueue(packetIn, this, this.gameController);
         Entity entity = this.clientWorldController.getEntityByID(packetIn.getEntityId());
+
+        if (entity instanceof EntityPlayer && (entity.isDead || ((EntityPlayer) entity).getHealth() <= 0.0f)) {
+            Exeter.getInstance().getEventManager().dispatch(new DeathEvent((EntityPlayer) entity));
+        }
 
         if (entity != null && packetIn.getDataManagerEntries() != null)
         {

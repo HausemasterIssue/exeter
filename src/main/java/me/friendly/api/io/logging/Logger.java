@@ -7,7 +7,7 @@ import net.minecraft.util.text.TextFormatting;
 
 public final class Logger {
     /** Logger instance */
-    private static Logger logger = null;
+    private static Logger INSTANCE = null;
 
     /**
      * Appends message param to client tag,
@@ -16,7 +16,7 @@ public final class Logger {
      * @param message to be printed
      */
     public void print(String message) {
-        System.out.println(String.format("[%s] %s", "Exeter", message));
+        System.out.printf("[%s] %s%n", "Exeter", message);
     }
 
     /**
@@ -29,8 +29,24 @@ public final class Logger {
         Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString(String.format("§c[%s] §7%s", "Exeter", message.replace("&", "§"))).setStyle(new Style().setColor(TextFormatting.GRAY)));
     }
 
+    /**
+     * Appends message param to client tag,
+     * and prints it to the chat.
+     *
+     * @param message to be printed
+     * @param id the id of the editable message
+     */
+    public void printToChat(String message, int id) {
+        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(
+                new TextComponentString(String.format(
+                        "§c[%s] §7%s", "Exeter",
+                        message.replace("&", "§")))
+                        .setStyle(new Style().setColor(TextFormatting.GRAY)),
+                id);
+    }
+
     public static Logger getLogger() {
-        return logger == null ? (logger = new Logger()) : logger;
+        return INSTANCE == null ? (INSTANCE = new Logger()) : INSTANCE;
     }
 }
 

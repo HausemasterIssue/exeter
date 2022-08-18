@@ -16,10 +16,7 @@ import me.friendly.exeter.config.Config;
 import me.friendly.exeter.core.Exeter;
 import me.friendly.exeter.module.impl.combat.*;
 import me.friendly.exeter.module.impl.exploits.*;
-import me.friendly.exeter.module.impl.miscellaneous.AutoRespawn;
-import me.friendly.exeter.module.impl.miscellaneous.ExtraTab;
-import me.friendly.exeter.module.impl.miscellaneous.MiddleClick;
-import me.friendly.exeter.module.impl.miscellaneous.NoRotate;
+import me.friendly.exeter.module.impl.miscellaneous.*;
 import me.friendly.exeter.module.impl.movement.*;
 import me.friendly.exeter.module.impl.render.*;
 import me.friendly.exeter.module.impl.world.*;
@@ -71,6 +68,7 @@ public final class ModuleManager
         register(new FreeCam());
         register(new MiddleClick());
         register(new LongJump());
+        register(new Notifications());
 
         this.registry.sort(Comparator.comparing(Module::getLabel));
 
