@@ -70,6 +70,7 @@ public final class ModuleManager
         register(new CameraClip());
         register(new FreeCam());
         register(new MiddleClick());
+        register(new LongJump());
 
         this.registry.sort(Comparator.comparing(Module::getLabel));
 
