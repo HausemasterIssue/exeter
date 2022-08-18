@@ -43,6 +43,7 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
+import viamcp.gui.GuiProtocolSelector;
 
 public class GuiMainMenu extends GuiScreen
 {
@@ -304,6 +305,8 @@ public class GuiMainMenu extends GuiScreen
 //        }
 
         this.realmsButton = this.addButton(new GuiButton(14, this.width / 2 - 100, p_73969_1_ + p_73969_2_ * 2, "Account Manager"));
+
+        this.buttonList.add(new GuiButton(69, 5, 5, 90, 20, "Version"));
     }
 
     /**
@@ -377,6 +380,11 @@ public class GuiMainMenu extends GuiScreen
             {
                 this.mc.displayGuiScreen(new GuiYesNo(this, I18n.format("selectWorld.deleteQuestion"), "'" + worldinfo.getWorldName() + "' " + I18n.format("selectWorld.deleteWarning"), I18n.format("selectWorld.deleteButton"), I18n.format("gui.cancel"), 12));
             }
+        }
+
+        if (button.id == 69)
+        {
+            this.mc.displayGuiScreen(new GuiProtocolSelector(this));
         }
     }
 
