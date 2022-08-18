@@ -3,8 +3,8 @@ plugins {
 }
 
 version = '1.0.0'
-group = 'wtf.sunder.client'
-archivesBaseName = 'Sunder'
+group = 'me.friendly'
+archivesBaseName = 'Exeter'
 
 sourceCompatibility = targetCompatibility = '17'
 compileJava {
@@ -20,7 +20,6 @@ compileJava {
 
 repositories {
     mavenCentral()
-
     maven {
         name = "jitpack.io"
         url = "https://jitpack.io"
@@ -33,27 +32,14 @@ configurations {
 }
 
 dependencies {
-    embed "com.github.therealbush:eventbus:1.0.2"
     embed "com.github.litarvan:OpenAuth:1.1.2"
 
     // minecraft will download these automatically, so theres no need to include in the jar
     implementation fileTree('libs')
-}
 
-//idea {
-//    project {
-//        runConfigurations {
-//            create(
-//                    "Exeter Launch",
-//                    org.jetbrains.gradle.ext.Application::class
-//            ) {
-//                mainClass = "Start"
-//                moduleName = "exeter.main"
-//                workingDirectory = "$projectDir/run"
-//            }
-//        }
-//    }
-//}
+    // add viaversion libs to jar
+    embed fileTree('libs/viaversion')
+}
 
 jar {
     from(configurations.embed.collect {
