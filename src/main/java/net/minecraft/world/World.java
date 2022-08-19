@@ -13,6 +13,9 @@ import java.util.UUID;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
+import de.gerrygames.viarewind.protocol.protocol1_7_6_10to1_8.types.Particle;
+import me.friendly.exeter.core.Exeter;
+import me.friendly.exeter.events.SpawnExplosionParticleEvent;
 import me.friendly.exeter.module.impl.render.NoWeather;
 import me.friendly.exeter.module.impl.render.NoWeather.Mode;
 import net.minecraft.advancements.AdvancementManager;
@@ -1211,6 +1214,14 @@ public abstract class World implements IBlockAccess
 
     private void spawnParticle(int particleID, boolean ignoreRange, double xCood, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... parameters)
     {
+        if (particleID == 0 || particleID == 1 || particleID == 2) {
+            SpawnExplosionParticleEvent event = new SpawnExplosionParticleEvent();
+            Exeter.getInstance().getEventManager().dispatch(event);
+            if (event.isCanceled()) {
+                return;
+            }
+        }
+
         for (int i = 0; i < this.eventListeners.size(); ++i)
         {
             ((IWorldEventListener)this.eventListeners.get(i)).spawnParticle(particleID, ignoreRange, xCood, yCoord, zCoord, xSpeed, ySpeed, zSpeed, parameters);

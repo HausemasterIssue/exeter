@@ -2,6 +2,9 @@ package net.minecraft.client.particle;
 
 import java.util.List;
 import java.util.Random;
+
+import me.friendly.exeter.core.Exeter;
+import me.friendly.exeter.events.ParticleRenderEvent;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
@@ -192,6 +195,13 @@ public class Particle
      */
     public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
     {
+        ParticleRenderEvent event = new ParticleRenderEvent();
+        Exeter.getInstance().getEventManager().dispatch(event);
+
+        if (event.isCanceled()) {
+            return;
+        }
+
         float f = (float)this.particleTextureIndexX / 16.0F;
         float f1 = f + 0.0624375F;
         float f2 = (float)this.particleTextureIndexY / 16.0F;
