@@ -69,6 +69,7 @@ public final class ModuleManager
         register(new MiddleClick());
         register(new LongJump());
         register(new Notifications());
+        register(new Trajectories());
 
         this.registry.sort(Comparator.comparing(Module::getLabel));
 
