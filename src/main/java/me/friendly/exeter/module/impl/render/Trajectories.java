@@ -172,7 +172,7 @@ public class Trajectories extends ToggleableModule {
                 } else {
                     RenderMethods.drawBox(new AxisAlignedBB(
                             x + 0.5, y, z + 0.5,
-                            x - 0.5, y + 0.5, z - 0.5
+                            x - 0.5, y + 0.05, z - 0.5
                     ));
                 }
 
