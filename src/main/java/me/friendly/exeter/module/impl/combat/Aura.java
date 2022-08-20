@@ -2,21 +2,20 @@ package me.friendly.exeter.module.impl.combat;
 
 import me.friendly.api.event.Listener;
 import me.friendly.api.minecraft.helper.RotationHelper;
+import me.friendly.api.properties.EnumProperty;
+import me.friendly.api.properties.NumberProperty;
+import me.friendly.api.properties.Property;
 import me.friendly.api.stopwatch.Stopwatch;
 import me.friendly.exeter.core.Exeter;
 import me.friendly.exeter.events.MoveUpdateEvent;
 import me.friendly.exeter.events.MoveUpdateEvent.Era;
 import me.friendly.exeter.module.ModuleType;
 import me.friendly.exeter.module.ToggleableModule;
-import me.friendly.api.properties.EnumProperty;
-import me.friendly.api.properties.NumberProperty;
-import me.friendly.api.properties.Property;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumHand;
 import viamcp.utils.AttackOrder;
 
@@ -46,6 +45,8 @@ public class Aura extends ToggleableModule {
     private final NumberProperty<Integer> max = new NumberProperty<>(12, 2, 20, "Max", "maxaps", "maxcps");
     private final NumberProperty<Integer> deviation = new NumberProperty<>(8, 0, 12, "Deviation", "random");
 
+    private final Property<Boolean> autoDisable = new Property<>(true, "Auto Disable", "autodisable", "repspawndisable");
+
     private final Stopwatch stopwatch = new Stopwatch();
     private EntityLivingBase target = null;
 
@@ -56,6 +57,13 @@ public class Aura extends ToggleableModule {
         listeners.add(new Listener<MoveUpdateEvent>("aura_moveupdate_listener") {
             @Override
             public void call(MoveUpdateEvent event) {
+                if (mc.player.ticksExisted < 5 && autoDisable.getValue()) {
+                    setRunning(false);
+                    return;
+                }
+
+                setTag(mode.getFixedValue());
+
                 if (!isValidTarget(target) || mode.getValue().equals(Mode.SWITCH)) {
                     target = (EntityLivingBase) mc.world.loadedEntityList
                             .stream()
@@ -166,6 +174,10 @@ public class Aura extends ToggleableModule {
         }
 
         if (base instanceof EntityArmorStand) {
+            return false;
+        }
+
+        if (AntiBot.BOTS.contains(base.getEntityId())) {
             return false;
         }
 

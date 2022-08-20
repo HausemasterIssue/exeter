@@ -16,6 +16,8 @@ public class GameSpeed extends ToggleableModule {
         listeners.add(new Listener<TickEvent>("gamespeed_tick_listener") {
             @Override
             public void call(TickEvent event) {
+                setTag(String.valueOf(speed.getValue()));
+
                 if (mc.timer != null) {
                     if (mc.player != null && mc.world != null) {
                         mc.timer.tickLength = 50.0f / speed.getValue();

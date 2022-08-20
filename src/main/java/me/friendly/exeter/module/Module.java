@@ -13,6 +13,7 @@ import me.friendly.exeter.core.Exeter;
 import me.friendly.api.properties.NumberProperty;
 import me.friendly.api.properties.Property;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.TextFormatting;
 
 /**
  * Client Module.
@@ -21,7 +22,7 @@ import net.minecraft.client.Minecraft;
 public class Module
 implements Labeled {
     private final String label;
-    private String tag;
+    private String tag = null;
     private final String[] aliases;
     /** Properties for the Module. */
     private final List<Property<?>> properties = new ArrayList<>();
@@ -36,7 +37,7 @@ implements Labeled {
      * @param aliases the aliases of the new module.
      */
     protected Module(String label, String[] aliases) {
-        this.label = this.tag = label;
+        this.label = label;
         this.aliases = aliases;
     }
 
@@ -55,6 +56,15 @@ implements Labeled {
 
     protected void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public String getDisplay() {
+        String display = label;
+        if (tag != null) {
+            display += " " + TextFormatting.GRAY + "[" + TextFormatting.WHITE + tag + TextFormatting.GRAY + "]";
+        }
+
+        return display;
     }
 
     public List<Property<?>> getProperties() {

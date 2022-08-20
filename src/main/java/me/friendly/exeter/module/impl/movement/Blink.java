@@ -44,6 +44,8 @@ public class Blink extends ToggleableModule {
         listeners.add(new Listener<TickEvent>("blink_tick_listener") {
             @Override
             public void call(TickEvent event) {
+                setTag(String.valueOf(packets.size()));
+
                 if (render.getValue()) {
                     movements.add(new Vec3d(mc.player.prevPosX, mc.player.prevPosY, mc.player.prevPosZ));
                     movements.add(mc.player.getPositionVector());

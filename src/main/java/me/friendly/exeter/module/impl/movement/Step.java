@@ -35,6 +35,8 @@ public class Step extends ToggleableModule {
         listeners.add(new Listener<StepEvent>("step_step_listener") {
             @Override
             public void call(StepEvent event) {
+                setTag(mode.getFixedValue());
+
                 if (mode.getValue().equals(Mode.NCP)) {
                     double h = mc.player.getEntityBoundingBox().minY - mc.player.posY;
 

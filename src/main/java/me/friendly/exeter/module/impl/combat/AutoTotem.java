@@ -42,6 +42,16 @@ public class AutoTotem extends ToggleableModule {
         listeners.add(new Listener<TickEvent>("autototem_tick_listener") {
             @Override
             public void call(TickEvent event) {
+                if (item.equals(Items.field_190929_cY)) {
+                    setTag("Totem");
+                } else if (item.equals(Items.END_CRYSTAL)) {
+                    setTag("Crystal");
+                } else if (item.equals(Items.GOLDEN_APPLE)) {
+                    setTag("GApple");
+                } else {
+                    setTag(null);
+                }
+
                 if (willDieFromFall() || health.getValue() > mc.player.getHealth()) {
                     item = Items.field_190929_cY;
                 } else {

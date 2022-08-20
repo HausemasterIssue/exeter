@@ -75,11 +75,11 @@ public final class Hud extends Module {
                     List<Module> modules = Exeter.getInstance().getModuleManager().getRegistry();
                     switch (organize.getValue()) {
                         case ABC:
-                            modules.sort(Comparator.comparing(Module::getTag));
+                            modules.sort(Comparator.comparing(Module::getDisplay));
                             break;
 
                         case LENGTH:
-                            modules.sort(Comparator.comparingInt((s) -> -FontUtil.getStringWidth(s.getTag())));
+                            modules.sort(Comparator.comparingInt((s) -> -FontUtil.getStringWidth(s.getDisplay())));
                             break;
                     }
 
@@ -90,14 +90,14 @@ public final class Hud extends Module {
                         if (module instanceof ToggleableModule) {
                             ToggleableModule t = (ToggleableModule) module;
                             if (t.isDrawn() && t.isRunning()) {
-                                int len = FontUtil.getStringWidth(t.getTag());
+                                int len = FontUtil.getStringWidth(t.getDisplay());
 
                                 int color = Colors.getClientColor();
                                 if (Colors.hudRainbow.getValue()) {
                                     color = Colors.getRainbow(Colors.rainbowSpeed.getValue().intValue(), rc++ * 50, Colors.saturation.getValue(), Colors.lightness.getValue());
                                 }
 
-                                FontUtil.drawString(t.getTag(), res.getScaledWidth() - len - 2, y, color);
+                                FontUtil.drawString(t.getDisplay(), res.getScaledWidth() - len - 2, y, color);
                                 y += FontUtil.getHeight() + 1;
                             }
                         }

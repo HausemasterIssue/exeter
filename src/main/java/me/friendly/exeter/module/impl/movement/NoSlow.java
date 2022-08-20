@@ -36,6 +36,12 @@ public class NoSlow extends ToggleableModule {
         listeners.add(new Listener<TickEvent>("noslow_tick_listener") {
             @Override
             public void call(TickEvent event) {
+                if (mode.getValue().equals(Mode.STRICT_NCP)) {
+                    setTag("Strict NCP");
+                } else {
+                    setTag(mode.getFixedValue());
+                }
+
                 if (!mc.player.isRiding() && mc.player.isHandActive()) {
 
                     if (mode.getValue().equals(Mode.STRICT_NCP)) {

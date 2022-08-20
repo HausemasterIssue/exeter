@@ -71,6 +71,7 @@ public final class ModuleManager
         register(new Xray());
         register(new AutoTotem());
         register(new FeetTrap());
+        register(new AntiBot());
 
         this.registry.sort(Comparator.comparing(Module::getLabel));
 

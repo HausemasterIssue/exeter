@@ -8,7 +8,7 @@ import me.friendly.api.properties.EnumProperty;
 import me.friendly.api.properties.Property;
 
 public class Sprint extends ToggleableModule {
-    private final Property<Mode> mode = new EnumProperty<>(Mode.LEGIT, "Mode", "m");
+    private final EnumProperty<Mode> mode = new EnumProperty<>(Mode.LEGIT, "Mode", "m");
 
     public Sprint() {
         super("Sprint", new String[]{"keepsprint", "alwayssprint"}, ModuleType.MOVEMENT);
@@ -17,6 +17,8 @@ public class Sprint extends ToggleableModule {
         listeners.add(new Listener<TickEvent>("sprint_tick_listener") {
             @Override
             public void call(TickEvent event) {
+                setTag(mode.getFixedValue());
+
                 if (mc.player != null && mc.world != null && !mc.player.isSprinting()) {
                     if (mode.getValue().equals(Mode.LEGIT)) {
                         mc.player.setSprinting(!mc.player.isCollidedHorizontally &&

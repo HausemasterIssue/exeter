@@ -20,6 +20,12 @@ public class Criticals extends ToggleableModule {
         listeners.add(new Listener<PacketEvent>("criticals_packet_send_event") {
             @Override
             public void call(PacketEvent event) {
+                if (mode.getValue().equals(Mode.STRICT_NCP)) {
+                    setTag("Strict NCP");
+                } else {
+                    setTag(mode.getFixedValue());
+                }
+
                 if (event.getPacket() instanceof CPacketUseEntity) {
                     CPacketUseEntity packet = event.getPacket();
                     if (packet.getAction().equals(Action.ATTACK) && packet.getEntityFromWorld(mc.world) instanceof EntityLivingBase && mc.player.onGround) {

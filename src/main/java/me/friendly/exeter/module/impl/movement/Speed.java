@@ -31,6 +31,27 @@ public class Speed extends ToggleableModule {
         listeners.add(new Listener<MoveEvent>("speed_move_listener") {
             @Override
             public void call(MoveEvent event) {
+                switch (mode.getValue()) {
+                    case STRICT_HOP: {
+                        setTag("Strict Strafe");
+                        break;
+                    }
+
+                    case NCP_HOP: {
+                        setTag("Strafe");
+                        break;
+                    }
+
+                    case YPORT: {
+                        setTag("YPort");
+                        break;
+                    }
+
+                    case ONGROUND:
+                        setTag("On Ground");
+                        break;
+                }
+
                 --lag;
                 if (lag > 0) {
                     return;

@@ -21,6 +21,8 @@ public class BowRelease extends ToggleableModule {
         listeners.add(new Listener<TickEvent>("bowrelease_tick_listener") {
             @Override
             public void call(TickEvent event) {
+                setTag(String.valueOf(ticks.getValue()));
+
                 if (mc.player.getActiveItemStack().getItem() instanceof ItemBow && mc.player.getItemInUseMaxCount() >= ticks.getValue()) {
                     mc.player.stopActiveHand();
                     mc.player.connection.sendPacket(new CPacketPlayerDigging(Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
