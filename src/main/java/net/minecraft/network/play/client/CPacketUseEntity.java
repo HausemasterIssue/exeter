@@ -12,8 +12,8 @@ import net.minecraft.world.World;
 
 public class CPacketUseEntity implements Packet<INetHandlerPlayServer>
 {
-    private int entityId;
-    private CPacketUseEntity.Action action;
+    public int entityId;
+    public CPacketUseEntity.Action action;
     private Vec3d hitVec;
     private EnumHand hand;
 

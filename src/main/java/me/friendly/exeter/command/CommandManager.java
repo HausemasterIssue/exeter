@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.StringJoiner;
 import me.friendly.api.event.Listener;
 import me.friendly.api.registry.ListRegistry;
@@ -15,7 +16,6 @@ import me.friendly.exeter.command.impl.client.Help;
 import me.friendly.exeter.command.impl.client.Modules;
 import me.friendly.exeter.command.impl.client.Prefix;
 import me.friendly.exeter.command.impl.client.Runtime;
-import me.friendly.exeter.command.impl.client.ScreenShot;
 import me.friendly.exeter.command.impl.client.Toggle;
 import me.friendly.exeter.command.impl.player.Grab;
 import me.friendly.exeter.command.impl.player.HClip;
@@ -48,8 +48,9 @@ extends ListRegistry<Command> {
         this.register(new Friends.Add());
         this.register(new Friends.Remove());
         this.register(new Bind());
-        this.register(new ScreenShot());
-        this.registry.sort((cmd1, cmd2) -> cmd1.getAliases()[0].compareTo(cmd2.getAliases()[0]));
+
+        this.registry.sort(Comparator.comparing(cmd -> cmd.getAliases()[0]));
+
         Exeter.getInstance().getEventManager().register(new Listener<PacketEvent>("commands_packet_listener"){
 
             @Override

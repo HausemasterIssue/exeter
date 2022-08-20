@@ -29,12 +29,11 @@ public final class ModuleManager
     extends ListRegistry<Module> {
 
     public ModuleManager() {
-        this.registry = new ArrayList();
+        this.registry = new ArrayList<>();
 
         register(new Hud());
         register(new Fullbright());
         register(new ClickGui());
-        register(new TabGui());
         register(new Colors());
         register(new Sprint());
         register(new Criticals());
@@ -57,7 +56,6 @@ public final class ModuleManager
         register(new Blink());
         register(new NoFall());
         register(new InventoryWalk());
-        register(new Flight());
         register(new SelfFill());
         register(new NoRender());
         register(new FastProjectile());
@@ -71,6 +69,8 @@ public final class ModuleManager
         register(new Notifications());
         register(new Trajectories());
         register(new Xray());
+        register(new AutoTotem());
+        register(new FeetTrap());
 
         this.registry.sort(Comparator.comparing(Module::getLabel));
 

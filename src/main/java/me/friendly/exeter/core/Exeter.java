@@ -5,14 +5,13 @@ import me.friendly.api.minecraft.inventory.InventoryManager;
 import me.friendly.exeter.command.CommandManager;
 import me.friendly.exeter.config.Config;
 import me.friendly.exeter.config.ConfigManager;
-import me.friendly.exeter.events.TotemPopEvent;
 import me.friendly.exeter.friend.FriendManager;
 import me.friendly.exeter.account.AccountManager;
 import me.friendly.exeter.keybind.KeybindManager;
 import me.friendly.api.io.logging.Logger;
 import me.friendly.exeter.manager.PopManager;
 import me.friendly.exeter.module.ModuleManager;
-import me.friendly.exeter.rotate.RotationManager;
+import me.friendly.exeter.manager.RotationManager;
 import org.lwjgl.opengl.Display;
 import viamcp.ViaMCP;
 

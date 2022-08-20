@@ -1,4 +1,4 @@
-package me.friendly.exeter.rotate;
+package me.friendly.exeter.manager;
 
 import me.friendly.api.event.Event;
 import me.friendly.api.event.Listener;

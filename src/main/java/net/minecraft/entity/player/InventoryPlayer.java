@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import me.friendly.exeter.core.Exeter;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.RecipeItemHelper;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
@@ -54,13 +55,16 @@ public class InventoryPlayer implements IInventory
      */
     public ItemStack getCurrentItem()
     {
-        int slot = Exeter.getInstance().getInventoryManager().slot;
-        if (slot == -1) {
-            slot = currentItem;
+        if (player.getEntityId() == Minecraft.getMinecraft().player.getEntityId()) {
+            int slot = Exeter.getInstance().getInventoryManager().slot;
+            if (slot == -1) {
+                slot = currentItem;
+            }
+
+            return isHotbar(slot) ? (ItemStack) this.mainInventory.get(slot) : ItemStack.field_190927_a;
         }
 
-        return isHotbar(this.currentItem) ? (ItemStack)this.mainInventory.get(slot) : ItemStack.field_190927_a;
-        // return isHotbar(this.currentItem) ? (ItemStack)this.mainInventory.get(this.currentItem) : ItemStack.field_190927_a;
+        return isHotbar(this.currentItem) ? (ItemStack)this.mainInventory.get(this.currentItem) : ItemStack.field_190927_a;
     }
 
     /**
