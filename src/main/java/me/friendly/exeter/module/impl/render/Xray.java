@@ -1,7 +1,11 @@
 package me.friendly.exeter.module.impl.render;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import me.friendly.api.event.Listener;
 import me.friendly.api.properties.NumberProperty;
+import me.friendly.exeter.config.Config;
 import me.friendly.exeter.events.LightValueEvent;
 import me.friendly.exeter.events.PutColorModifierEvent;
 import me.friendly.exeter.events.RenderBlockLayerEvent;
@@ -12,6 +16,9 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockRenderLayer;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -80,6 +87,54 @@ public class Xray extends ToggleableModule {
                 event.setCanceled(true);
             }
         });
+
+        new Config("xray_blocks.json") {
+
+            @Override
+            public void load(Object... var1) {
+                if (!getFile().exists()) {
+                    try {
+                        getFile().createNewFile();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    return;
+                }
+
+                BLOCKS.clear();
+
+                try (FileReader fileReader = new FileReader(getFile());) {
+                    JsonElement element = new JsonParser().parse(fileReader);
+                    if (!element.isJsonArray()) {
+                        return;
+                    }
+
+                    JsonArray arr = element.getAsJsonArray();
+                    for (JsonElement e : arr) {
+                        int id = e.getAsInt();
+
+                        Block block = Block.getBlockById(id);
+                        if (!block.equals(Blocks.AIR)) {
+                            BLOCKS.add(block);
+                        }
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public void save(Object... var1) {
+                JsonArray array = new JsonArray();
+                BLOCKS.forEach((b) -> array.add(Block.getIdFromBlock(b)));
+                try (FileWriter writer = new FileWriter(getFile())) {
+                    writer.write(array.toString());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
     }
 
     @Override

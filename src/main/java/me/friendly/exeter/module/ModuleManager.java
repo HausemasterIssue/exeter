@@ -76,7 +76,7 @@ public final class ModuleManager
 
         Exeter.getInstance().getKeybindManager().getKeybindByLabel("Click Gui").setKey(Keyboard.KEY_RSHIFT);
 
-        new Config("module_configurations.json"){
+        new Config("module_configurations.json") {
 
             @Override
             public void load(Object... source) {
