@@ -9,6 +9,9 @@ import java.nio.ShortBuffer;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Comparator;
+
+import me.friendly.exeter.core.Exeter;
+import me.friendly.exeter.events.PutColorModifierEvent;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -435,26 +438,29 @@ public class BufferBuilder
         int i = this.getColorIndex(vertexIndex);
         int j = -1;
 
-        if (!this.noColor)
-        {
+        if (!this.noColor) {
             j = this.rawIntBuffer.get(i);
 
-            if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN)
-            {
-                int k = (int)((float)(j & 255) * red);
-                int l = (int)((float)(j >> 8 & 255) * green);
-                int i1 = (int)((float)(j >> 16 & 255) * blue);
+            if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
+                int k = (int) ((float) (j & 255) * red);
+                int l = (int) ((float) (j >> 8 & 255) * green);
+                int i1 = (int) ((float) (j >> 16 & 255) * blue);
                 j = j & -16777216;
                 j = j | i1 << 16 | l << 8 | k;
-            }
-            else
-            {
-                int j1 = (int)((float)(j >> 24 & 255) * red);
-                int k1 = (int)((float)(j >> 16 & 255) * green);
-                int l1 = (int)((float)(j >> 8 & 255) * blue);
+            } else {
+                int j1 = (int) ((float) (j >> 24 & 255) * red);
+                int k1 = (int) ((float) (j >> 16 & 255) * green);
+                int l1 = (int) ((float) (j >> 8 & 255) * blue);
                 j = j & 255;
                 j = j | j1 << 24 | k1 << 16 | l1 << 8;
             }
+        }
+
+        PutColorModifierEvent event = new PutColorModifierEvent(j);
+        Exeter.getInstance().getEventManager().dispatch(event);
+
+        if (event.isCanceled()) {
+            j = event.j;
         }
 
         this.rawIntBuffer.put(i, j);

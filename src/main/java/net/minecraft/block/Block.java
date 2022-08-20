@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import javax.annotation.Nullable;
+
+import me.friendly.exeter.core.Exeter;
+import me.friendly.exeter.events.LightValueEvent;
+import me.friendly.exeter.events.RenderBlockLayerEvent;
+import me.friendly.exeter.events.ShouldRenderSideEvent;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -203,6 +208,13 @@ public class Block
     @Deprecated
     public int getLightValue(IBlockState state)
     {
+        LightValueEvent event = new LightValueEvent(this, lightValue);
+        Exeter.getInstance().getEventManager().dispatch(event);
+
+        if (event.isCanceled()) {
+            return event.light;
+        }
+
         return this.lightValue;
     }
 
@@ -499,6 +511,12 @@ public class Block
     @Deprecated
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
     {
+        ShouldRenderSideEvent event = new ShouldRenderSideEvent(this, pos, side);
+        Exeter.getInstance().getEventManager().dispatch(event);
+        if (event.isCanceled()) {
+            return false;
+        }
+
         AxisAlignedBB axisalignedbb = blockState.getBoundingBox(blockAccess, pos);
 
         switch (side)
@@ -817,6 +835,12 @@ public class Block
 
     public BlockRenderLayer getBlockLayer()
     {
+        RenderBlockLayerEvent event = new RenderBlockLayerEvent(BlockRenderLayer.SOLID, this);
+        Exeter.getInstance().getEventManager().dispatch(event);
+        if (event.isCanceled()) {
+            return event.getLayer();
+        }
+
         return BlockRenderLayer.SOLID;
     }
 

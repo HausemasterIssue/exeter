@@ -21,6 +21,9 @@ import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
+
+import me.friendly.exeter.core.Exeter;
+import me.friendly.exeter.events.LightValueEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.material.EnumPushReaction;
@@ -363,7 +366,16 @@ public class BlockStateContainer
 
         public int getLightValue()
         {
-            return this.block.getLightValue(this);
+            int lightValue = this.block.getLightValue(this);
+
+            LightValueEvent event = new LightValueEvent(block, lightValue);
+            Exeter.getInstance().getEventManager().dispatch(event);
+
+            if (event.isCanceled()) {
+                return event.light;
+            } else {
+                return lightValue;
+            }
         }
 
         public boolean isTranslucent()
@@ -413,7 +425,16 @@ public class BlockStateContainer
 
         public float getAmbientOcclusionLightValue()
         {
-            return this.block.getAmbientOcclusionLightValue(this);
+            float v = this.block.getAmbientOcclusionLightValue(this);
+
+            LightValueEvent event = new LightValueEvent(block, (int) v);
+            Exeter.getInstance().getEventManager().dispatch(event);
+
+            if (event.isCanceled()) {
+                return (float) event.light;
+            } else {
+                return v;
+            }
         }
 
         public boolean isBlockNormalCube()

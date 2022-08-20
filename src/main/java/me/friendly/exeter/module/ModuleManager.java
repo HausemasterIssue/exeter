@@ -70,6 +70,7 @@ public final class ModuleManager
         register(new LongJump());
         register(new Notifications());
         register(new Trajectories());
+        register(new Xray());
 
         this.registry.sort(Comparator.comparing(Module::getLabel));
 
